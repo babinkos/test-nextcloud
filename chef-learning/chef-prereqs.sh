@@ -6,7 +6,7 @@ sudo sed -i 's%deb-src http:\/\/us.archive.ubuntu.com%deb-src http:\/\/by.archiv
 sudo sed -i 's%deb-src http:\/\/archive.ubuntu.com%deb-src http:\/\/by.archive.ubuntu.com%' /etc/apt/sources.list
 sudo apt update
 exit 1
-wget -qO /tmp/chef-server-core_12.17.33-1_amd64.deb https://packages.chef.io/files/stable/chef-server/12.17.33/ubuntu/16.04/chef-server-core_12.17.33-1_amd64.deb
+#wget -qO /tmp/chef-server-core_12.17.33-1_amd64.deb https://packages.chef.io/files/stable/chef-server/12.17.33/ubuntu/16.04/chef-server-core_12.17.33-1_amd64.deb
 sudo apt install git curl -y
 sudo dpkg -i /tmp/chef-server-core_12.17.33-1_amd64.deb
 sudo systemctl start apt-daily.timer
