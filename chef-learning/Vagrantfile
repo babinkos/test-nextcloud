@@ -2,9 +2,13 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/xenial64"
+#  config.vm.box = "ubuntu/xenial64"
+  config.vm.box = "pybox"
   config.vm.provider "virtualbox" do |v|
     v.memory = "4096"
+  end
+  if File.exist?("chef-server-core_12.17.33-1_amd64.deb") then
+    config.vm.provision "file", source: "chef-server-core_12.17.33-1_amd64.deb", destination: "/tmp/chef-server-core_12.17.33-1_amd64.deb"
   end
   config.vm.provision "shell", path: "chef-prereqs.sh", privileged: false
 end
