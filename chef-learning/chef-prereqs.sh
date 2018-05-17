@@ -15,7 +15,7 @@ else
   wget "https://packages.chef.io/files/stable/chef-server/12.17.33/ubuntu/16.04/chef-server-core_12.17.33-1_amd64.deb" -qO "/tmp/chef-server-core_12.17.33-1_amd64.deb"
 fi
 
-#2800962092ead67747ed2cd2087b0e254eb5e1a1b169cdc162c384598e4caed5
+#https://downloads.chef.io/chef-server/12.17.33#ubuntu
 if [ "$(cat /tmp/chef-server-core_12.17.33-1_amd64.deb | sha256sum | head -c 64)" = "2800962092ead67747ed2cd2087b0e254eb5e1a1b169cdc162c384598e4caed5" ]; then
     echo "Success:  matches provided sha256sum"
 else
@@ -26,12 +26,12 @@ sudo apt install git curl -y
 sudo dpkg -i /tmp/chef-server-core_12.17.33-1_amd64.deb
 sudo systemctl start apt-daily.timer
 sudo mkdir /drop
-chef-server-ctl reconfigure
-
+sudo chef-server-ctl reconfigure
+sleep 2
 echo "Waiting for services..."
 until (curl -sSD - http://localhost:8000/_status) | grep "200 OK"; do sleep 15s; done
 while (curl -sS http://localhost:8000/_status) | grep "fail"; do sleep 15s; done
-
+sleep 2
 echo "Creating initial user and organization..."
 sudo chef-server-ctl user-create chefadmin Chef Admin admin@4thcoffee.com insecurepassword --filename /drop/chefadmin.pem
 sudo chef-server-ctl org-create 4thcoffee "Fourth Coffee, Inc." --association_user chefadmin --filename 4thcoffee-validator.pem
