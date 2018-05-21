@@ -1,5 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+debs=["chef-server-core_12.17.33-1_amd64.deb","chef-manage_2.5.15-1_amd64.deb"]
 
 Vagrant.configure("2") do |config|
 #  config.vm.box = "ubuntu/xenial64"
@@ -7,9 +8,13 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     v.memory = "4096"
   end
-  if File.exist?("chef-server-core_12.17.33-1_amd64.deb") then
-    config.vm.provision "file", source: "chef-server-core_12.17.33-1_amd64.deb", destination: "/tmp/chef-server-core_12.17.33-1_amd64.deb"
+  debs.each do |val|
+    if File.exist?("#{val}") then
+      config.vm.provision "file", source: "#{val}", destination: "/tmp/#{val}"
+
+    end
   end
+
   config.vm.provision "shell", path: "chef-prereqs.sh", privileged: false
   config.vm.network "forwarded_port", guest: 80, host: 8080, autocorrect: true
   config.vm.network "forwarded_port", guest: 443, host: 8443, autocorrect: true
