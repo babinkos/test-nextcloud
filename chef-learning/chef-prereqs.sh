@@ -55,5 +55,5 @@ sudo chef-server-ctl user-create chefadmin Chef Admin admin@4thcoffee.com insecu
 sudo chef-server-ctl org-create 4thcoffee "Fourth Coffee, Inc." --association_user chefadmin --filename 4thcoffee-validator.pem
 
 sudo chef-manage-ctl reconfigure --accept-license
-echo "chef-server installation finished ! Please use https://localhost:8443/login to access management console"
+echo "chef-server installation finished ! Please use https://localhost:8443/login to login and https://localhost:8443/organizations to access management console"
 sudo systemctl start apt-daily.timer
