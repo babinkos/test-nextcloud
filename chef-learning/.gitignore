@@ -1,3 +1,4 @@
 **/*console.log
 **/.vagrant
 **/*.deb
+**/nodes/*
