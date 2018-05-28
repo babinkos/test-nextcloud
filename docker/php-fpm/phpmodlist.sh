@@ -22,8 +22,12 @@ docker run --rm -a stdin -a stdout -v /tmp/artifacts/:/mnt/artifacts -i -t php:7
 cut -d"-" -f1,2 /tmp/artifacts/phpmods.txt
 cut -d"-" -f1,2 /tmp/artifacts/phpmods.txt > php-mods-apk-names-2add.txt
 
-# apcu bz2 exif gd gmp imagick imap intl ldap mcrypt memcached pdo_pgsql redis smbclient zip
-
+## apcu bz2 exif gd gmp imagick imap intl ldap mcrypt memcached pdo_pgsql redis smbclient zip
+#        libfreetype6-dev \
+#        libjpeg62-turbo-dev \
+#        libmcrypt-dev \
+#        libpng-dev \
+# libjpeg-turbo-dev libpng-dev libmcrypt-dev
 
 #docker run -a stdin -a stdout -i -t php:7.2-fpm-alpine3.7 apk search php7-Core php7-date php7-filter php7-hash php7-mysqlnd php7-pcre php7-PDO php7-pdo_sqlite php7-Phar php7-readline php7-Reflection php7-session php7-sodium php7-SPL php7-sqlite3 php7-standard php7-tokenizer php7-xml
 nmcli dev show | grep DNS
@@ -34,3 +38,6 @@ nmcli dev show | grep DNS
 #
 docker run --rm -a stdin -a stdout -v /tmp/artifacts/:/mnt/artifacts -i -t php:7.2-fpm-alpine3.7 ash -c "apk update && apk search php7-date php7-filter php7-hash php7-mysqlnd php7-pcre php7-pdo php7-pdo_sqlite php7-phar php7-readline php7-reflection php7-session php7-sodium php7-spl php7-sqlite3 php7-standard php7-tokenizer php7-xml | sort > /mnt/artifacts/phpmods.txt"
 cut -d"-" -f1,2 /tmp/artifacts/phpmods.txt
+
+Possible values for ext-name:
+bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo filter ftp gd gettext gmp hash iconv imap interbase intl json ldap mbstring mysqli oci8 odbc opcache pcntl pdo pdo_dblib pdo_firebird pdo_mysql pdo_oci pdo_odbc pdo_pgsql pdo_sqlite pgsql phar posix pspell readline recode reflection session shmop simplexml snmp soap sockets sodium spl standard sysvmsg sysvsem sysvshm tidy tokenizer wddx xml xmlreader xmlrpc xmlwriter xsl zend_test zip
