@@ -6,7 +6,7 @@ FROM my_nextcloud:current
 
 RUN echo http://alpine.gliderlabs.com/alpine/v`cat /etc/alpine-release | cut -d"." -f1,2`/main > /etc/apk/repositories; \
 apk add -U --virtual .build-deps \
-    bzip2-dev \
+    autoconf alpine-sdk bzip2-dev \
     gmp-dev \
     imagemagick-dev \
     imap-dev \
@@ -18,6 +18,7 @@ docker-php-ext-install -j$(nproc) \
     gmp \
     imap \
 ; \
+echo "$PHP_AUTOCONF"; \
 pecl install \
     imagick \
 ; \
@@ -30,8 +31,8 @@ runDeps="$( \
         | sort -u \
         | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 )"; \
-echo $runDeps; \
 apk add --virtual .nextcloud-phpext-rundeps $runDeps; \
+echo $runDeps; \
 apk del .build-deps; \
 docker-php-source delete ; \
 rm -rf /var/cache/apk/*; \
