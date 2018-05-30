@@ -1,0 +1,3 @@
+[submodule "docker/php-fpm/inherit/docker"]
+	path = docker/php-fpm/inherit/docker
+	url = https://github.com/nextcloud/docker.git
