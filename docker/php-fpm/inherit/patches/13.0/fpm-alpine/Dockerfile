@@ -3,8 +3,8 @@ FROM php:7.1-fpm-alpine3.7
 
 # entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
-    \
-    apk add --no-cache \
+    echo http://alpine.gliderlabs.com/alpine/v`cat /etc/alpine-release | cut -d"." -f1,2`/main > /etc/apk/repositories;\
+    apk add -U \
         rsync \
     ; \
     \
@@ -15,7 +15,7 @@ RUN set -ex; \
 # see https://docs.nextcloud.com/server/12/admin_manual/installation/source_installation.html
 RUN set -ex; \
     \
-    apk add --no-cache --virtual .build-deps \
+    apk add --virtual .build-deps \
         alpine-sdk \
         autoconf \
         freetype-dev \
@@ -32,7 +32,7 @@ RUN set -ex; \
     \
     docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr; \
     docker-php-ext-configure ldap; \
-    docker-php-ext-install \
+    docker-php-ext-install -j$(nproc) \
         exif \
         gd \
         intl \
@@ -86,7 +86,7 @@ VOLUME /var/www/html
 ENV NEXTCLOUD_VERSION 13.0.2
 
 RUN set -ex; \
-    apk add --no-cache --virtual .fetch-deps \
+    apk add --virtual .fetch-deps \
         bzip2 \
         gnupg \
     ; \
@@ -106,7 +106,7 @@ RUN set -ex; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
     chmod +x /usr/src/nextcloud/occ; \
-    apk del .fetch-deps
+    apk del .fetch-deps;rm -rf /var/cache/apk/*;
 
 COPY *.sh /
 COPY config/* /usr/src/nextcloud/config/
