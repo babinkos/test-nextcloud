@@ -1,8 +1,8 @@
 # adding bz2, gmp, imagick, imap PHP extension on-top of base image
 # also disabling mcypt PHP extension as insecure
 # since we use apk install several times - no-cache removed, we remove cache at the end with rm
-# adding Fastly's CDN as repository
-FROM nextcloud:fpm-alpine
+# adding Fastly's CDN as repository; chenged nextcloud:fpm-alpine to self-built image
+FROM my_nextcloud:current
 
 RUN echo http://alpine.gliderlabs.com/alpine/v`cat /etc/alpine-release | cut -d"." -f1,2`/main > /etc/apk/repositories; \
 apk add -U --virtual .build-deps \
