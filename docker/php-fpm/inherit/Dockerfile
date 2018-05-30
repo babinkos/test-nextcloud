@@ -13,7 +13,7 @@ apk add -U --virtual .build-deps \
     krb5-dev \
 ; \
 docker-php-ext-configure imap --with-kerberos --with-imap-ssl; \
-docker-php-ext-install \
+docker-php-ext-install -j$(nproc) \
     bz2 \
     gmp \
     imap \
