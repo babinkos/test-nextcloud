@@ -76,8 +76,8 @@ sha256sum -c nextcloud-$NEXTCLOUD_VERSION.tar.bz2.sha256 && \
 echo "source archieve nextcloud-$NEXTCLOUD_VERSION.tar.bz2 SHA256 and GPG are Good!" && \
 rm *.asc *.sha256 && \
 #cd ../../.. ; exit 1
-echo docker build -t my_nextcloud:current . && \
+docker build -t my_nextcloud:current . && \
 ls && \
 cd ../../.. && \
-echo docker build -t my_nextcloud:phpext .
+docker build -t my_nextcloud:phpext .
 echo "Job is done !!"
