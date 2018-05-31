@@ -4,7 +4,8 @@
 # adding Fastly's CDN as repository; chenged nextcloud:fpm-alpine to self-built image
 FROM my_nextcloud:current
 
-RUN echo http://alpine.gliderlabs.com/alpine/v`cat /etc/alpine-release | cut -d"." -f1,2`/main > /etc/apk/repositories; \
+RUN echo "adding more PHP extensions to my_nextcloud:current"; \
+echo http://alpine.gliderlabs.com/alpine/v`cat /etc/alpine-release | cut -d"." -f1,2`/main > /etc/apk/repositories; \
 apk add -U --virtual .build-deps \
     autoconf alpine-sdk bzip2-dev \
     gmp-dev \
@@ -31,7 +32,7 @@ runDeps="$( \
         | sort -u \
         | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 )"; \
-apk add --virtual .nextcloud-phpext-rundeps $runDeps; \
+apk add -v --virtual .nextcloud-phpext-rundeps $runDeps; \
 echo $runDeps; \
 apk del .build-deps; \
 docker-php-source delete ; \

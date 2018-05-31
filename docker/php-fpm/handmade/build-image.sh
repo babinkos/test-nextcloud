@@ -2,7 +2,6 @@
 # expected to have repository cloned in subdir docker/13.0/fpm-alpine
 NEXTCLOUD_VERSION=13.0.2
 
-cd patches/13.0/fpm-alpine
 
 if [[ ! -f "nextcloud-$NEXTCLOUD_VERSION.tar.bz2" ]]; then
   echo "nextcloud-$NEXTCLOUD_VERSION.tar.bz2 doesn't exist in build context directory, downloading..."
@@ -76,8 +75,5 @@ sha256sum -c nextcloud-$NEXTCLOUD_VERSION.tar.bz2.sha256 && \
 echo "source archieve nextcloud-$NEXTCLOUD_VERSION.tar.bz2 SHA256 and GPG are Good!" && \
 rm *.asc *.sha256 && \
 #cd ../../.. ; exit 1
-docker build -t my_nextcloud:current . && \
-ls && \
-cd ../../.. && \
-docker build -t my_nextcloud:phpext .
+time docker build -t my_nextcloud:phpext . | tee buildlog.txt
 echo "Job is done !!"

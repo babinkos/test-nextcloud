@@ -1,5 +1,11 @@
-# DO NOT EDIT: created by update.sh from Dockerfile-alpine.template
-FROM php:7.1-fpm-alpine3.7
+# origin was created by update.sh from Dockerfile-alpine.template
+FROM php:7.2-fpm-alpine3.7
+
+ENV NEXTCLOUD_VERSION 13.0.2
+
+VOLUME /var/www/html
+
+ADD "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" /usr/src/
 
 # entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
@@ -11,17 +17,22 @@ RUN set -ex; \
     rm /var/spool/cron/crontabs/root; \
     echo '*/15 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data;\
 
-# install the PHP extensions we need
+# install the PHP extensions we need (+adding bz2, gmp, imagick, imap with bzip2-dev gmp-dev imagemagick-dev imap-dev krb5-dev )
 # see https://docs.nextcloud.com/server/12/admin_manual/installation/source_installation.html
 set -ex; \
     \
     apk add --virtual .build-deps \
         alpine-sdk \
         autoconf \
+        bzip2-dev \
         freetype-dev \
+        gmp-dev \
         icu-dev \
+        imagemagick-dev \
+        imap-dev \
+        krb5-dev \
         libjpeg-turbo-dev \
-        libmcrypt-dev \
+#        libmcrypt-dev \
         libpng-dev \
         libmemcached-dev \
         libxml2-dev \
@@ -31,13 +42,17 @@ set -ex; \
     ; \
     \
     docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr; \
+    docker-php-ext-configure imap --with-kerberos --with-imap-ssl; \
     docker-php-ext-configure ldap; \
     docker-php-ext-install -j$(nproc) \
+        bz2 \
         exif \
         gd \
+        gmp \
         intl \
+        imap \
         ldap \
-        mcrypt \
+#        mcrypt \
         opcache \
         pcntl \
         pdo_mysql \
@@ -46,11 +61,13 @@ set -ex; \
     ; echo "$PHP_AUTOCONF"; \
     pecl install \
         APCu-5.1.11 \
+        imagick \
         memcached-3.0.4 \
         redis-3.1.6 \
     ; \
     docker-php-ext-enable \
         apcu \
+        imagick \
         memcached \
         redis \
     ; \
@@ -60,9 +77,11 @@ set -ex; \
             | tr ',' '\n' \
             | sort -u \
             | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-    )"; \
+    )"; echo "$runDeps"; \
     apk add --virtual .nextcloud-phpext-rundeps $runDeps; \
-    apk del .build-deps;rm -rf /var/cache/apk/*;\
+    apk del .build-deps; \
+    docker-php-source delete; \
+    rm -rf /var/cache/apk/*;\
 
 # set recommended PHP.ini settings
 # see https://docs.nextcloud.com/server/12/admin_manual/configuration_server/server_tuning.html#enable-php-opcache
@@ -78,14 +97,11 @@ set -ex; \
     \
     mkdir /var/www/data; \
     chown -R www-data:root /var/www; \
-    chmod -R g=u /var/www
-
-VOLUME /var/www/html
+    chmod -R g=u /var/www; \
 
 # adding source from build env directory, because gnupg servers is unstable and unaccessible sometimes
-ENV NEXTCLOUD_VERSION 13.0.2
-ADD "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" /usr/src/
-RUN set -ex; \
+#RUN
+  set -ex; \
 #    apk add -U --virtual .fetch-deps \
 #        bzip2 \
 #        gnupg \
