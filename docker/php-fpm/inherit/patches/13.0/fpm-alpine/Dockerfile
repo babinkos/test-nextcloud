@@ -82,32 +82,32 @@ set -ex; \
 
 VOLUME /var/www/html
 
-
+# adding source from build env directory, because gnupg servers is unstable and unaccessible sometimes
 ENV NEXTCLOUD_VERSION 13.0.2
-
+ADD "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" /usr/src/
 RUN set -ex; \
-    apk add -U --virtual .fetch-deps \
-        bzip2 \
-        gnupg \
-    ; \
-    \
-    curl -fsSL -o nextcloud.tar.bz2 \
-        "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2"; \
-    curl -fsSL -o nextcloud.tar.bz2.asc \
-        "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2.asc"; \
-    export GNUPGHOME="$(mktemp -d)"; \
-# gpg key from https://nextcloud.com/nextcloud.asc
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 28806A878AE423A28372792ED75899B9A724937A; \
-    gpg --batch --verify nextcloud.tar.bz2.asc nextcloud.tar.bz2; \
-    rm -r "$GNUPGHOME" nextcloud.tar.bz2.asc; \
-    tar -xjf nextcloud.tar.bz2 -C /usr/src/; \
-    rm nextcloud.tar.bz2; \
+#    apk add -U --virtual .fetch-deps \
+#        bzip2 \
+#        gnupg \
+#    ; \
+#    \
+#    curl -fsSL -o nextcloud.tar.bz2 \
+#        "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2"; \
+#    curl -fsSL -o nextcloud.tar.bz2.asc \
+#        "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2.asc"; \
+#    export GNUPGHOME="$(mktemp -d)"; \
+## gpg key from https://nextcloud.com/nextcloud.asc
+#    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 28806A878AE423A28372792ED75899B9A724937A; \
+#    gpg --batch --verify nextcloud.tar.bz2.asc nextcloud.tar.bz2; \
+#    rm -r "$GNUPGHOME" nextcloud.tar.bz2.asc; \
+#    tar -xjf nextcloud.tar.bz2 -C /usr/src/; \
+#    rm nextcloud.tar.bz2; \
     rm -rf /usr/src/nextcloud/updater; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
     chmod +x /usr/src/nextcloud/occ; \
-    apk del .fetch-deps;rm -rf /var/cache/apk/*;
-
+#    apk del .fetch-deps; \
+    rm -rf /var/cache/apk/*;ls /usr/src/;ls /usr/src/nextcloud/
 COPY *.sh /
 COPY config/* /usr/src/nextcloud/config/
 
