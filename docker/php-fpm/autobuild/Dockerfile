@@ -12,6 +12,7 @@ RUN set -ex; \
     echo http://alpine.gliderlabs.com/alpine/v$(cut -d"." -f1,2 /etc/alpine-release)/main > /etc/apk/repositories;\
     apk add -U \
         rsync \
+        fcgi \
     ; \
     \
     rm /var/spool/cron/crontabs/root; \
@@ -98,7 +99,7 @@ RUN set -ex; \
     apk add --virtual .fetch-deps \
         bzip2 \
         gnupg \
-    ; \
+    ; echo "nextcloud version=${NEXTCLOUD_VERSION}"; ls -l; \
     \
     curl -fsSL -o nextcloud.tar.bz2 \
         "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2"; \
@@ -106,7 +107,7 @@ RUN set -ex; \
         "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2.asc"; \
     curl -fsSL -o nextcloud.tar.bz2.sha256 \
         "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2.sha256"; \
-    gpg --import /tmp/nextcloud.asc;\
+    ls -l; gpg --import /tmp/nextcloud.asc;\
     gpg --verify nextcloud.tar.bz2.asc && \
     sha256sum -c nextcloud.tar.bz2.sha256 && \
     echo "source archieve nextcloud-$NEXTCLOUD_VERSION.tar.bz2 SHA256 and GPG are Good!";\
@@ -117,7 +118,18 @@ RUN set -ex; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
     chmod +x /usr/src/nextcloud/occ;\
     apk del .fetch-deps; \
-    rm -rf /var/cache/apk/*;ls /usr/src/;ls /usr/src/nextcloud/
+    rm -rf /var/cache/apk/*;ls /usr/src/;ls /usr/src/nextcloud/; \
+    echo "ping.path = /ping" >> /usr/local/etc/php-fpm.conf; \
+    echo "ping.response = pong" >> /usr/local/etc/php-fpm.conf; \
+    echo "access.log = /dev/null" >> /usr/local/etc/php-fpm.conf; \
+    echo "pm.status_path = /status" >> /usr/local/etc/php-fpm.d/www.conf \
+# to get fpm status use command ping or status like this: SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000
+HEALTHCHECK --interval=10s --timeout=3s --start-period=30s \
+        CMD \
+        SCRIPT_NAME=/ping \
+        SCRIPT_FILENAME=/ping \
+        REQUEST_METHOD=GET \
+        cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1
 
 COPY *.sh /
 COPY config/* /usr/src/nextcloud/config/
