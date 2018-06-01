@@ -107,8 +107,8 @@ RUN set -ex; \
     curl -fsSL -o nextcloud.tar.bz2.sha256 \
         "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2.sha256"; \
     gpg --import /tmp/nextcloud.asc;\
-    gpg --verify nextcloud-$NEXTCLOUD_VERSION.tar.bz2.asc && \
-    sha256sum -c nextcloud-$NEXTCLOUD_VERSION.tar.bz2.sha256 && \
+    gpg --verify nextcloud.tar.bz2.asc && \
+    sha256sum -c nextcloud.tar.bz2.sha256 && \
     echo "source archieve nextcloud-$NEXTCLOUD_VERSION.tar.bz2 SHA256 and GPG are Good!";\
     tar -xjf nextcloud.tar.bz2 -C /usr/src/;\
     rm nextcloud.tar.bz2 *.asc *.sha256 /tmp/nextcloud.asc;\
