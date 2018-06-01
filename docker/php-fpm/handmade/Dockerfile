@@ -121,7 +121,7 @@ set -ex; \
     rm -rf /usr/src/nextcloud/updater; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
-    chmod +x /usr/src/nextcloud/occ; ls /usr/src/nextcloud \
+    chmod +x /usr/src/nextcloud/occ; ls /usr/src/nextcloud
 #    apk del .fetch-deps; \
 #    rm -rf /var/cache/apk/*;ls /usr/src/;ls /usr/src/nextcloud/
 COPY *.sh /
