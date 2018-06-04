@@ -9,12 +9,12 @@ VOLUME /var/www/html
 
 # entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
+    if [ ! -f /tmp/nextcloud.asc ]; then echo "/tmp/nexctloud.asc not found";curl -fsSL -o /tmp/nextcloud.asc "https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc";else echo "nexctloud.asc copied from build context directory"; fi;\
     echo http://alpine.gliderlabs.com/alpine/v$(cut -d"." -f1,2 /etc/alpine-release)/main > /etc/apk/repositories;\
     apk add -U \
         rsync \
         fcgi \
     ; \
-    if [ ! -f /tmp/nextcloud.asc ]; then curl -fsSL -o /tmp/nextcloud.asc "https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc" fi;\
     rm /var/spool/cron/crontabs/root; \
     echo '*/15 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data;\
 # install the PHP extensions we need (+adding bz2, gmp, imagick, imap with bzip2-dev gmp-dev imagemagick-dev imap-dev krb5-dev )
