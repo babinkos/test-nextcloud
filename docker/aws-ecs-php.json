@@ -3,19 +3,26 @@
     "containerDefinitions": [
         {
             "dnsSearchDomains": null,
-            "logConfiguration": null,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "",
+                    "awslogs-region": ""
+                }
+            },
             "entryPoint": [],
             "portMappings": [],
             "command": [],
             "linuxParameters": null,
+            "cpu": 0,
             "environment": null,
             "ulimits": null,
             "dnsServers": null,
             "mountPoints": [
                 {
-                    "sourceVolume": "nextcloud",
+                    "readOnly": null,
                     "containerPath": "/var/www/html",
-                    "readOnly": ""
+                    "sourceVolume": "nextcloud"
                 }
             ],
             "workingDirectory": null,
@@ -26,7 +33,7 @@
             "image": "docker.io/k0s2018/test-nextcloud:latest",
             "disableNetworking": null,
             "healthCheck": null,
-            "essential": true,
+            "essential": false,
             "links": [],
             "hostname": null,
             "extraHosts": null,
@@ -37,148 +44,190 @@
             "name": "simple-app"
         },
         {
-            "name": "nginx",
-            "image": "nginx",
-            "memory": "500",
-            "memoryReservation": "128",
-            "essential": true,
+            "dnsSearchDomains": null,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "",
+                    "awslogs-region": ""
+                }
+            },
+            "entryPoint": null,
             "portMappings": [],
+            "command": null,
+            "linuxParameters": null,
+            "cpu": 0,
             "environment": [
                 {
                     "name": "VIRTUAL_HOST",
                     "value": "servhostname.local"
                 }
             ],
+            "ulimits": null,
+            "dnsServers": null,
             "mountPoints": [
                 {
-                    "sourceVolume": "nginx_conf",
+                    "readOnly": true,
                     "containerPath": "/etc/nginx/nginx.conf",
-                    "readOnly": true
+                    "sourceVolume": "nginx_conf"
                 },
                 {
-                    "sourceVolume": "nextcloud",
+                    "readOnly": true,
                     "containerPath": "/var/www/html",
-                    "readOnly": true
+                    "sourceVolume": "nextcloud"
                 }
             ],
-            "volumesFrom": null,
-            "hostname": null,
-            "user": null,
             "workingDirectory": null,
+            "dockerSecurityOptions": null,
+            "memory": 500,
+            "memoryReservation": 128,
+            "volumesFrom": null,
+            "image": "nginx",
+            "disableNetworking": null,
+            "healthCheck": null,
+            "essential": false,
+            "links": [],
+            "hostname": null,
             "extraHosts": null,
-            "logConfiguration": null,
-            "ulimits": null,
+            "user": null,
+            "readonlyRootFilesystem": null,
             "dockerLabels": null,
-            "links": [
-                "nginx:nginx-proxy",
-                "omgwtfssl:nginx"
-            ]
+            "privileged": null,
+            "name": "nginx"
         },
         {
-            "name": "nginx-proxy",
-            "image": "jwilder/nginx-proxy:alpine",
-            "memory": "128",
-            "essential": true,
+            "dnsSearchDomains": null,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "",
+                    "awslogs-region": ""
+                }
+            },
+            "entryPoint": null,
             "portMappings": [
                 {
-                    "hostPort": "80",
-                    "containerPort": "80",
-                    "protocol": "tcp"
+                    "hostPort": 80,
+                    "protocol": "tcp",
+                    "containerPort": 80
                 },
                 {
-                    "hostPort": "443",
-                    "containerPort": "443",
-                    "protocol": "tcp"
+                    "hostPort": 443,
+                    "protocol": "tcp",
+                    "containerPort": 443
                 }
             ],
+            "command": null,
+            "linuxParameters": null,
+            "cpu": 0,
             "environment": [
                 {
                     "name": "MAX_UPLOAD_SIZE",
                     "value": "10GB"
                 }
             ],
-            "links": [
-                "nginx:nginx-proxy",
-                "omgwtfssl:nginx-proxy"
-            ],
+            "ulimits": null,
+            "dnsServers": null,
             "mountPoints": [
                 {
-                    "sourceVolume": "certs",
+                    "readOnly": true,
                     "containerPath": "/etc/nginx/certs",
-                    "readOnly": true
+                    "sourceVolume": "certs"
                 },
                 {
-                    "sourceVolume": "vhostd",
+                    "readOnly": false,
                     "containerPath": "/etc/nginx/vhost.d",
-                    "readOnly": false
+                    "sourceVolume": "vhostd"
                 },
                 {
-                    "sourceVolume": "html",
+                    "readOnly": null,
                     "containerPath": "/usr/share/nginx/html",
-                    "readOnly": ""
+                    "sourceVolume": "html"
                 },
                 {
-                    "sourceVolume": "docker-sock",
+                    "readOnly": true,
                     "containerPath": "/tmp/docker.sock",
-                    "readOnly": true
+                    "sourceVolume": "docker-sock"
                 }
             ],
-            "volumesFrom": null,
-            "hostname": null,
-            "user": null,
             "workingDirectory": null,
+            "dockerSecurityOptions": null,
+            "memory": 128,
+            "volumesFrom": null,
+            "image": "jwilder/nginx-proxy:alpine",
+            "disableNetworking": null,
+            "healthCheck": null,
+            "essential": false,
+            "links": [],
+            "hostname": null,
             "extraHosts": null,
-            "logConfiguration": null,
-            "ulimits": null,
-            "dockerLabels": null
+            "user": null,
+            "readonlyRootFilesystem": null,
+            "dockerLabels": null,
+            "privileged": null,
+            "name": "nginx-proxy"
         },
         {
-            "name": "omgwtfssl",
-            "image": "paulczar/omgwtfssl",
-            "memory": "128",
-            "essential": true,
+            "dnsSearchDomains": null,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "",
+                    "awslogs-region": ""
+                }
+            },
+            "entryPoint": null,
             "portMappings": [],
+            "command": null,
+            "linuxParameters": null,
+            "cpu": 0,
             "environment": [
-                {
-                    "name": "SSL_SUBJECT",
-                    "value": "servhostname.local"
-                },
                 {
                     "name": "CA_SUBJECT",
                     "value": "my@example.com"
                 },
                 {
-                    "name": "SSL_KEY",
-                    "value": "/certs/servhostname.local.key"
+                    "name": "SSL_CERT",
+                    "value": "/certs/servhostname.local.crt"
                 },
                 {
                     "name": "SSL_CSR",
                     "value": "/certs/servhostname.local.csr"
                 },
                 {
-                    "name": "SSL_CERT",
-                    "value": "/certs/servhostname.local.crt"
+                    "name": "SSL_KEY",
+                    "value": "/certs/servhostname.local.key"
+                },
+                {
+                    "name": "SSL_SUBJECT",
+                    "value": "servhostname.local"
                 }
             ],
-            "links": [
-                "nginx-proxy:omgwtfssl",
-                "omgwtfssl:nginx"
-            ],
+            "ulimits": null,
+            "dnsServers": null,
             "mountPoints": [
                 {
-                    "sourceVolume": "certs",
+                    "readOnly": null,
                     "containerPath": "/certs",
-                    "readOnly": ""
+                    "sourceVolume": "certs"
                 }
             ],
-            "volumesFrom": null,
-            "hostname": null,
-            "user": null,
             "workingDirectory": null,
+            "dockerSecurityOptions": null,
+            "memory": 128,
+            "volumesFrom": null,
+            "image": "paulczar/omgwtfssl",
+            "disableNetworking": null,
+            "healthCheck": null,
+            "essential": false,
+            "links": [],
+            "hostname": null,
             "extraHosts": null,
-            "logConfiguration": null,
-            "ulimits": null,
-            "dockerLabels": null
+            "user": null,
+            "readonlyRootFilesystem": null,
+            "dockerLabels": null,
+            "privileged": null,
+            "name": "omgwtfssl"
         }
     ],
     "memory": null,
@@ -189,40 +238,40 @@
     "cpu": null,
     "volumes": [
         {
+            "name": "nextcloud",
             "host": {
                 "sourcePath": "/mnt/efs/nextcloud"
-            },
-            "name": "nextcloud"
+            }
         },
         {
+            "name": "nginx_conf",
             "host": {
                 "sourcePath": "/mnt/efs/nginx/nginx.conf"
-            },
-            "name": "nginx_conf"
+            }
         },
         {
+            "name": "docker-sock",
             "host": {
                 "sourcePath": "/var/run/docker.sock"
-            },
-            "name": "docker-sock"
+            }
         },
         {
+            "name": "certs",
             "host": {
                 "sourcePath": "/mnt/efs/certs"
-            },
-            "name": "certs"
+            }
         },
         {
+            "name": "vhostd",
             "host": {
                 "sourcePath": "/mnt/efs/vhostd"
-            },
-            "name": "vhostd"
+            }
         },
         {
+            "name": "html",
             "host": {
                 "sourcePath": "/mnt/efs/html"
-            },
-            "name": "html"
+            }
         }
     ],
     "placementConstraints": []
