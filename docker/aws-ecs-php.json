@@ -8,11 +8,16 @@
             "portMappings": [],
             "command": [],
             "linuxParameters": null,
-            "cpu": 10,
             "environment": null,
             "ulimits": null,
             "dnsServers": null,
-            "mountPoints": null,
+            "mountPoints": [
+                {
+                    "sourceVolume": "nextcloud",
+                    "containerPath": "/var/www/html",
+                    "readOnly": ""
+                }
+            ],
             "workingDirectory": null,
             "dockerSecurityOptions": null,
             "memory": 300,
@@ -63,6 +68,116 @@
             "extraHosts": null,
             "logConfiguration": null,
             "ulimits": null,
+            "dockerLabels": null,
+            "links": [
+                "nginx:nginx-proxy",
+                "omgwtfssl:nginx"
+            ]
+        },
+        {
+            "name": "nginx-proxy",
+            "image": "jwilder/nginx-proxy:alpine",
+            "memory": "128",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": "80",
+                    "containerPort": "80",
+                    "protocol": "tcp"
+                },
+                {
+                    "hostPort": "443",
+                    "containerPort": "443",
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "MAX_UPLOAD_SIZE",
+                    "value": "10GB"
+                }
+            ],
+            "links": [
+                "nginx:nginx-proxy",
+                "omgwtfssl:nginx-proxy"
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "certs",
+                    "containerPath": "/etc/nginx/certs",
+                    "readOnly": true
+                },
+                {
+                    "sourceVolume": "vhostd",
+                    "containerPath": "/etc/nginx/vhost.d",
+                    "readOnly": false
+                },
+                {
+                    "sourceVolume": "html",
+                    "containerPath": "/usr/share/nginx/html",
+                    "readOnly": ""
+                },
+                {
+                    "sourceVolume": "docker-sock",
+                    "containerPath": "/tmp/docker.sock",
+                    "readOnly": true
+                }
+            ],
+            "volumesFrom": null,
+            "hostname": null,
+            "user": null,
+            "workingDirectory": null,
+            "extraHosts": null,
+            "logConfiguration": null,
+            "ulimits": null,
+            "dockerLabels": null
+        },
+        {
+            "name": "omgwtfssl",
+            "image": "paulczar/omgwtfssl",
+            "memory": "128",
+            "essential": true,
+            "portMappings": [],
+            "environment": [
+                {
+                    "name": "SSL_SUBJECT",
+                    "value": "servhostname.local"
+                },
+                {
+                    "name": "CA_SUBJECT",
+                    "value": "my@example.com"
+                },
+                {
+                    "name": "SSL_KEY",
+                    "value": "/certs/servhostname.local.key"
+                },
+                {
+                    "name": "SSL_CSR",
+                    "value": "/certs/servhostname.local.csr"
+                },
+                {
+                    "name": "SSL_CERT",
+                    "value": "/certs/servhostname.local.crt"
+                }
+            ],
+            "links": [
+                "nginx-proxy:omgwtfssl",
+                "omgwtfssl:nginx"
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "certs",
+                    "containerPath": "/certs",
+                    "readOnly": ""
+                }
+            ],
+            "volumesFrom": null,
+            "hostname": null,
+            "user": null,
+            "workingDirectory": null,
+            "extraHosts": null,
+            "logConfiguration": null,
+            "ulimits": null,
             "dockerLabels": null
         }
     ],
@@ -90,6 +205,24 @@
                 "sourcePath": "/var/run/docker.sock"
             },
             "name": "docker-sock"
+        },
+        {
+            "host": {
+                "sourcePath": "/mnt/efs/certs"
+            },
+            "name": "certs"
+        },
+        {
+            "host": {
+                "sourcePath": "/mnt/efs/vhostd"
+            },
+            "name": "vhostd"
+        },
+        {
+            "host": {
+                "sourcePath": "/mnt/efs/html"
+            },
+            "name": "html"
         }
     ],
     "placementConstraints": []
