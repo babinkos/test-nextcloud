@@ -1,5 +1,6 @@
 # based on nextcloud:fpm-alpine sources
 FROM php:7.2-fpm-alpine3.7
+COPY *.sh /
 COPY nextcloud.asc /tmp/nextcloud.asc
 ENV NEXTCLOUD_VERSION 13.0.2
 
@@ -9,6 +10,7 @@ VOLUME /var/www/html
 
 # entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
+    chmod +x entrypoint.sh; \
     if [ ! -f /tmp/nextcloud.asc ]; then echo "/tmp/nexctloud.asc not found";curl -fsSL -o /tmp/nextcloud.asc "https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc";else echo "nexctloud.asc copied from build context directory"; fi;\
     echo http://alpine.gliderlabs.com/alpine/v$(cut -d"." -f1,2 /etc/alpine-release)/main > /etc/apk/repositories;\
     apk add -U \
@@ -132,7 +134,6 @@ HEALTHCHECK --interval=10s --timeout=3s --start-period=30s \
         REQUEST_METHOD=GET \
         cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1
 
-COPY *.sh /
 COPY config/* /usr/src/nextcloud/config/
 
 ENTRYPOINT ["/entrypoint.sh"]
