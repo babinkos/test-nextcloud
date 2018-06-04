@@ -14,7 +14,7 @@ RUN set -ex; \
         rsync \
         fcgi \
     ; \
-    \
+    if [ ! -f /tmp/nextcloud.asc ]; then curl -fsSL -o /tmp/nextcloud.asc "https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc" fi;\
     rm /var/spool/cron/crontabs/root; \
     echo '*/15 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data;\
 # install the PHP extensions we need (+adding bz2, gmp, imagick, imap with bzip2-dev gmp-dev imagemagick-dev imap-dev krb5-dev )
@@ -101,6 +101,7 @@ RUN set -ex; \
         gnupg \
     ; echo "nextcloud version=${NEXTCLOUD_VERSION}"; ls -l; \
     \
+
     curl -fsSL -o nextcloud.tar.bz2 \
         "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2"; \
     curl -fsSL -o nextcloud.tar.bz2.asc \
