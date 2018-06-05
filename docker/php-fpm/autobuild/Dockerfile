@@ -2,8 +2,8 @@
 FROM php:7.2-fpm-alpine3.7
 COPY *.sh /
 COPY nextcloud.asc /tmp/nextcloud.asc
-COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /*.apk /
-COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /var/cache/ /var/cache/
+#COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /*.apk /
+#COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /var/cache/ /var/cache/
 ENV NEXTCLOUD_VERSION 13.0.2
 VOLUME /var/www/html
 #ADD "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" /usr/src/
@@ -110,7 +110,7 @@ RUN set -ex; \
     echo "source archieve nextcloud-$NEXTCLOUD_VERSION.tar.bz2 SHA256 and GPG are Good!";\
     tar -xjf nextcloud.tar.bz2 -C /usr/src/;\
     rm nextcloud.tar.bz2 ./*.asc ./*.sha256 /tmp/nextcloud.asc /*.apk;\
-    rm -rf /usr/src/nextcloud/updater; rm -rf /var/cache/apk; \
+    rm -rf /usr/src/nextcloud/updater; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
     chmod +x /usr/src/nextcloud/occ;\
