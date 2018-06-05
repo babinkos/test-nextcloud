@@ -1,3 +1,2 @@
 .gitignore
 docker-compose.test.yml
-test-fcgi.sh
