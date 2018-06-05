@@ -2,8 +2,8 @@
 FROM php:7.2-fpm-alpine3.7
 COPY *.sh /
 COPY nextcloud.asc /tmp/nextcloud.asc
-COPY --from=docker.io/k0s2018/test-nextcloud:cache /*.apk /
-COPY --from=docker.io/k0s2018/test-nextcloud:cache /var/cache/ /var/cache/
+COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /*.apk /
+COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /var/cache/ /var/cache/
 ENV NEXTCLOUD_VERSION 13.0.2
 VOLUME /var/www/html
 #ADD "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" /usr/src/
