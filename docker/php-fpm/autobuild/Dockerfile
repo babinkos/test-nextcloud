@@ -109,7 +109,8 @@ RUN set -ex; \
     sha256sum -c nextcloud.tar.bz2.sha256 && \
     echo "source archieve nextcloud-$NEXTCLOUD_VERSION.tar.bz2 SHA256 and GPG are Good!";\
     tar -xjf nextcloud.tar.bz2 -C /usr/src/;\
-    rm nextcloud.tar.bz2 ./*.asc ./*.sha256 /tmp/nextcloud.asc /*.apk;\
+    rm -f nextcloud.tar.bz2 ./*.asc ./*.sha256 /tmp/nextcloud.asc; \
+    rm -f /*.apk; \
     rm -rf /usr/src/nextcloud/updater; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
