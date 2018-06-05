@@ -1,0 +1,170 @@
+{
+    "containerDefinitions": [
+        {
+            "environment": [
+                {
+                    "name": "MYSQL_HOST",
+                    "value": "db"
+                }
+            ],
+            "essential": true,
+            "image": "nextcloud:fpm",
+            "mountPoints": [
+                {
+                    "containerPath": "/var/www/html",
+                    "sourceVolume": "Nextcloud"
+                }
+            ],
+            "name": "app"
+        },
+        {
+            "essential": true,
+            "image": "mariadb",
+            "mountPoints": [
+                {
+                    "containerPath": "/var/lib/mysql",
+                    "sourceVolume": "Db"
+                }
+            ],
+            "name": "db"
+        },
+        {
+            "environment": [
+                {
+                    "name": "SSL_SUBJECT",
+                    "value": "servhostname.local"
+                },
+                {
+                    "name": "CA_SUBJECT",
+                    "value": "my@example.com"
+                },
+                {
+                    "name": "SSL_KEY",
+                    "value": "/certs/servhostname.local.key"
+                },
+                {
+                    "name": "SSL_CSR",
+                    "value": "/certs/servhostname.local.csr"
+                },
+                {
+                    "name": "SSL_CERT",
+                    "value": "/certs/servhostname.local.crt"
+                }
+            ],
+            "essential": true,
+            "image": "paulczar/omgwtfssl",
+            "mountPoints": [
+                {
+                    "containerPath": "/certs",
+                    "sourceVolume": "Certs"
+                }
+            ],
+            "name": "omgwtfssl"
+        },
+        {
+            "environment": [
+                {
+                    "name": "MAX_UPLOAD_SIZE",
+                    "value": "10GB"
+                }
+            ],
+            "essential": true,
+            "image": "jwilder/nginx-proxy:alpine",
+            "mountPoints": [
+                {
+                    "containerPath": "/etc/nginx/certs",
+                    "sourceVolume": "Certs"
+                },
+                {
+                    "containerPath": "/etc/nginx/vhost.d",
+                    "sourceVolume": "Vhost_D"
+                },
+                {
+                    "containerPath": "/usr/share/nginx/html",
+                    "sourceVolume": "Html"
+                },
+                {
+                    "containerPath": "/tmp/docker.sock",
+                    "sourceVolume": "VarRunDocker_Sock"
+                }
+            ],
+            "name": "proxy",
+            "portMappings": [
+                {
+                    "containerPort": 80,
+                    "hostPort": 80
+                },
+                {
+                    "containerPort": 443,
+                    "hostPort": 443
+                }
+            ]
+        },
+        {
+            "environment": [
+                {
+                    "name": "VIRTUAL_HOST",
+                    "value": "servhostname.local"
+                }
+            ],
+            "essential": true,
+            "image": "nginx",
+            "mountPoints": [
+                {
+                    "containerPath": "/var/www/html",
+                    "sourceVolume": "Nextcloud"
+                },
+                {
+                    "containerPath": "/etc/nginx/nginx.conf",
+                    "sourceVolume": "_Nginx_Conf"
+                }
+            ],
+            "name": "web"
+        }
+    ],
+    "family": "",
+    "volumes": [
+        {
+            "host": {
+                "sourcePath": "db"
+            },
+            "name": "Db"
+        },
+        {
+            "host": {
+                "sourcePath": "nextcloud"
+            },
+            "name": "Nextcloud"
+        },
+        {
+            "host": {
+                "sourcePath": "./nginx.conf"
+            },
+            "name": "_Nginx_Conf"
+        },
+        {
+            "host": {
+                "sourcePath": "certs"
+            },
+            "name": "Certs"
+        },
+        {
+            "host": {
+                "sourcePath": "vhost.d"
+            },
+            "name": "Vhost_D"
+        },
+        {
+            "host": {
+                "sourcePath": "html"
+            },
+            "name": "Html"
+        },
+        {
+            "host": {
+                "sourcePath": "/var/run/docker.sock"
+            },
+            "name": "VarRunDocker_Sock"
+        }
+    ]
+}
