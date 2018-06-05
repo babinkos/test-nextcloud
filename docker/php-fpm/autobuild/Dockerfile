@@ -15,8 +15,8 @@ RUN set -ex; \
     echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories;\
     apk add -U \
         rsync \
-        fcgi \
-    ; \
+        fcgi; \
+    echo "$(ls -l /*.apk | wc -l) apk packages were copied from previous build stage image"; \
     rm /var/spool/cron/crontabs/root; \
     echo '*/15 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data;\
 # install the PHP extensions we need (+adding bz2, gmp, imagick, imap with bzip2-dev gmp-dev imagemagick-dev imap-dev krb5-dev )
@@ -110,7 +110,7 @@ RUN set -ex; \
     echo "source archieve nextcloud-$NEXTCLOUD_VERSION.tar.bz2 SHA256 and GPG are Good!";\
     tar -xjf nextcloud.tar.bz2 -C /usr/src/;\
     rm nextcloud.tar.bz2 ./*.asc ./*.sha256 /tmp/nextcloud.asc /*.apk;\
-    rm -rf /usr/src/nextcloud/updater; rm -rf /var/cache/apk\
+    rm -rf /usr/src/nextcloud/updater; rm -rf /var/cache/apk; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
     chmod +x /usr/src/nextcloud/occ;\
