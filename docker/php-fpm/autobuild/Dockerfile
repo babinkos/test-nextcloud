@@ -127,5 +127,5 @@ HEALTHCHECK --interval=10s --timeout=3s --start-period=30s \
         REQUEST_METHOD=GET \
         cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1
 COPY config/* /usr/src/nextcloud/config/
-ENTRYPOINT ['/entrypoint.sh']
-CMD ['php-fpm']
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["php-fpm"]
