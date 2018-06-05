@@ -1,0 +1,36 @@
+Sending build context to Docker daemon  4.096kB
+Step 1/3 : FROM alpine:3.7
+ ---> 3fd9065eaf02
+Step 2/3 : RUN echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories;apk fetch -U     rsync     fcgi     alpine-sdk     autoconf     bzip2-dev     freetype-dev     gmp-dev     icu-dev     imagemagick-dev     imap-dev     krb5-dev     libjpeg-turbo-dev     libpng-dev     libmemcached-dev     libxml2-dev     openldap-dev     pcre-dev     postgresql-dev     bzip2     gnupg
+ ---> Using cache
+ ---> e68f99a2555e
+Step 3/3 : RUN apk fetch   abuild acct alpine-baselayout alpine-keys alpine-sdk apk-tools attr autoconf binutils binutils-libs build-base busybox bzip2 bzip2-dev c-client ca-certificates cryptsetup-libs curl cyrus-sasl-dev db device-mapper-libs e2fsprogs-dev e2fsprogs-libs expat fakeroot fcgi fontconfig fortify-headers freetype freetype-dev g++ gcc git gmp gmp-dev gnupg gnutls icu-dev icu-libs imagemagick-c++ imagemagick-dev imagemagick-libs imap-dev isl keyutils-libs kmod krb5-conf krb5-dev krb5-libs krb5-server-ldap lcms2 lddtree libacl libassuan libatomic libattr libblkid libburn libbz2 libc-dev libc-utils libcap libcom_err libcurl libedit libfdisk libffi libgcc libgcrypt libgmpxx libgomp libgpg-error libisoburn libisofs libjpeg-turbo libjpeg-turbo-dev libksba libldap libltdl libmemcached-dev libmemcached-libs libmount libpcre16 libpcre32 libpcrecpp libpng libpng-dev libpq libressl libressl-dev libressl2.6-libcrypto libressl2.6-libssl libressl2.6-libtls libsasl libsmartcols libssh2 libstdc++ libtasn1 libunistring libuuid libverto libxml2 libxml2-dev lz4-libs lzip lzo m4 make mkinitfs mpc1 mpfr3 mtools musl musl-dev musl-utils ncurses-libs ncurses-terminfo ncurses-terminfo-base nettle npth openldap-dev p11-kit patch pax-utils pcre pcre-dev pcre2 perl pinentry pkgconf popt postgresql-dev postgresql-libs rsync scanelf squashfs-tools sudo tar util-linux-dev xorriso xz-libs zlib zlib-dev
+ ---> Running in 173aee01e07f
+Downloading cryptsetup-libs-1.7.5-r1
+Downloading curl-7.60.0-r1
+Downloading libldap-2.4.45-r3
+Downloading libressl2.6-libcrypto-2.6.4-r2
+Downloading zlib-1.2.11-r1
+Downloading libcurl-7.60.0-r1
+Downloading libressl2.6-libssl-2.6.4-r2
+Downloading libressl2.6-libtls-2.6.4-r2
+Downloading device-mapper-libs-2.02.175-r0
+Downloading npth-1.5-r1
+Downloading libressl-dev-2.6.4-r2
+Downloading imagemagick-c++-7.0.7.11-r1
+Downloading libburn-1.4.8-r0
+Downloading lz4-libs-1.8.0-r1
+Downloading perl-5.26.2-r0
+Downloading binutils-libs-2.30-r1
+Downloading libstdc++-6.4.0-r5
+Downloading keyutils-libs-1.5.10-r0
+Downloading libjpeg-turbo-1.5.2-r0
+Downloading sudo-1.8.21_p2-r1
+Downloading libmemcached-libs-1.0.18-r2
+Downloading libcap-2.25-r1
+Downloading libfdisk-2.31-r0
+Downloading nettle-3.3-r0
+Downloading ncurses-libs-6.0_p20171125-r0
+Downloading libssh2-1.8.0-r2
+Downloading libressl-2.6.4-r2
+Downloading musl-dev-1.1.18-r3

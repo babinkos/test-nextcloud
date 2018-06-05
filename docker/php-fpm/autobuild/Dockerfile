@@ -2,12 +2,15 @@
 FROM php:7.2-fpm-alpine3.7
 COPY *.sh /
 COPY nextcloud.asc /tmp/nextcloud.asc
+COPY --from=docker.io/k0s2018/test-nextcloud:cache /*.apk /
+COPY --from=docker.io/k0s2018/test-nextcloud:cache /var/cache/ /var/cache/
 ENV NEXTCLOUD_VERSION 13.0.2
 VOLUME /var/www/html
 #ADD "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" /usr/src/
 # entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
-    chmod +x /entrypoint.sh; \
+    chmod +x /entrypoint.sh \
+     /test-fcgi.sh; \
     if [ ! -f /tmp/nextcloud.asc ]; then echo '/tmp/nexctloud.asc not found';curl -fsSL -o /tmp/nextcloud.asc 'https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc';else echo 'nexctloud.asc copied from build context directory'; fi;\
     echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories;\
     apk add -U \
