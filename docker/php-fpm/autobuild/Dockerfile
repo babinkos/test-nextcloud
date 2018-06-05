@@ -13,7 +13,7 @@ RUN set -ex; \
      /test-fcgi.sh; \
     if [ ! -f /tmp/nextcloud.asc ]; then echo '/tmp/nexctloud.asc not found';curl -fsSL -o /tmp/nextcloud.asc 'https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc';else echo 'nexctloud.asc copied from build context directory'; fi;\
     echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories;\
-    apk add -U \
+    apk -q add -U \
         rsync \
         fcgi; \
     echo "$(ls -l /*.apk | wc -l) apk packages were copied from previous build stage image"; \
@@ -21,7 +21,7 @@ RUN set -ex; \
     echo '*/15 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data;\
 # install the PHP extensions we need (+adding bz2, gmp, imagick, imap with bzip2-dev gmp-dev imagemagick-dev imap-dev krb5-dev )
 # see https://docs.nextcloud.com/server/12/admin_manual/installation/source_installation.html
-    apk add --virtual .build-deps \
+    apk -q add --virtual .build-deps \
         alpine-sdk \
         autoconf \
         bzip2-dev \
@@ -39,9 +39,9 @@ RUN set -ex; \
         pcre-dev \
         postgresql-dev \
     ; \
-    docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr; \
-    docker-php-ext-configure imap --with-kerberos --with-imap-ssl; \
-    docker-php-ext-configure ldap; \
+    docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr > /dev/null; \
+    docker-php-ext-configure imap --with-kerberos --with-imap-ssl > /dev/null; \
+    docker-php-ext-configure ldap > /dev/null; \
     docker-php-ext-install -j$(nproc) \
         bz2 \
         exif \
@@ -55,13 +55,13 @@ RUN set -ex; \
         pdo_mysql \
         pdo_pgsql \
         zip \
-    ; \
+    > /dev/null; \
     pecl install \
         APCu-5.1.11 \
         imagick \
         memcached-3.0.4 \
         redis-3.1.6 \
-    ; \
+    > /dev/null; \
     docker-php-ext-enable \
         apcu \
         imagick \
@@ -74,8 +74,8 @@ RUN set -ex; \
             | sort -u \
             | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
     )"; \
-    apk add --virtual .nextcloud-phpext-rundeps $runDeps; \
-    apk del .build-deps; \
+    apk -q add --virtual .nextcloud-phpext-rundeps $runDeps; \
+    apk -q del .build-deps; \
     docker-php-source delete; \
 # set recommended PHP.ini settings
 # see https://docs.nextcloud.com/server/12/admin_manual/configuration_server/server_tuning.html#enable-php-opcache
