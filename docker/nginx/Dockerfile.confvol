@@ -1,0 +1,11 @@
+FROM alpine:3.7
+VOLUME ["/usr/local/etc/nginx"]
+RUN mkdir -p /usr/local/etc/nginx; \
+ touch /usr/local/etc/nginx/nginx.conf; \
+ { \
+ echo '#!/bin/sh'; \
+ echo 'cp -f /nginx.conf /usr/local/etc/nginx/nginx.conf'; \
+ }>/cmd.sh; \
+ chmod +x /cmd.sh
+COPY nginx.conf /nginx.conf
+CMD ["/cmd.sh"]

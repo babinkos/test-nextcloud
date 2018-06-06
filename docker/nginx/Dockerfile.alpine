@@ -1,0 +1,8 @@
+FROM nginx:alpine
+VOLUME ["/usr/local/etc/nginx"]
+RUN echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \
+ apk add -U curl --no-cache; \
+ rm -rf /var/cache/apk
+COPY www-2-nginx.sh /www-2-nginx.sh
+ENTRYPOINT ["/www-2-nginx.sh"]
+CMD ["nginx", "-g", "daemon off;"]
