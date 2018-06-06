@@ -5,6 +5,7 @@ RUN mkdir -p /usr/local/etc/nginx; \
  { \
  echo '#!/bin/sh'; \
  echo 'cp -f /nginx.conf /usr/local/etc/nginx/nginx.conf'; \
+ echo 'sleep 999999d'; \
  }>/cmd.sh; \
  chmod +x /cmd.sh
 COPY nginx.conf /nginx.conf
