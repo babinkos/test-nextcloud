@@ -127,10 +127,7 @@ RUN set -ex; \
 # to get fpm status use command ping or status like this: SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000
 HEALTHCHECK --interval=10s --timeout=3s --start-period=30s \
         CMD \
-        SCRIPT_NAME=/ping \
-        SCRIPT_FILENAME=/ping \
-        REQUEST_METHOD=GET \
-        cgi-fcgi -bind -connect 127.0.0.1:9000 || exit 1
+        /ping.sh || exit 1
 COPY config/* /usr/src/nextcloud/config/
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]

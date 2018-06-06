@@ -15,3 +15,6 @@ RUN { \
   chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s \
+        CMD \
+        curl http://localhost:80/ping || exit 1
