@@ -1,15 +1,13 @@
 FROM alpine:3.7
 VOLUME ["/usr/local/etc/nginx"]
-RUN mkdir -p /usr/local/etc/nginx; \
-# touch /usr/local/etc/nginx/nginx.conf; \
- { \
- echo '#!/bin/sh'; \
- echo 'cp -f /nginx.conf /usr/local/etc/nginx/nginx.conf'; \
- echo 'sleep 999999d &'; \
- }>/cmd.sh; \
- chmod +x /cmd.sh
 COPY nginx.conf /nginx.conf
-CMD ["/cmd.sh"]
+COPY volconfinit.sh /volconfinit.sh
+COPY sleep.sh /sleep.sh
+RUN mkdir -p /usr/local/etc/nginx; \
+ chmod +x /volconfinit.sh; \
+ chmod +x /sleep.sh
+ENTRYPOINT ["/volconfinit.sh"]
+CMD ["/sleep.sh"]
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s \
         CMD \
         ls /usr/local/etc/nginx/nginx.conf || exit 1
