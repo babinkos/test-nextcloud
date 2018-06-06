@@ -10,7 +10,8 @@ VOLUME /var/www/html
 # entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
     chmod +x /entrypoint.sh \
-     /test-fcgi.sh; \
+     /test-fcgi.sh \
+     /ping.sh; \
     if [ ! -f /tmp/nextcloud.asc ]; then echo '/tmp/nexctloud.asc not found';curl -fsSL -o /tmp/nextcloud.asc 'https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc';else echo 'nexctloud.asc copied from build context directory'; fi;\
     echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories;\
     apk -q add -U \
