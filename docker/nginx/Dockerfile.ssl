@@ -1,0 +1,5 @@
+FROM paulczar/omgwtfssl
+COPY sleep.sh /sleep.sh
+RUN chmod +x /sleep.sh
+ENTRYPOINT ["/usr/local/bin/generate-certs"]
+CMD ["/sleep.sh"]
