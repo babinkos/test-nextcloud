@@ -1,11 +1,15 @@
-FROM blang/golang-alpine
+FROM golang:1.10-alpine3.7
 RUN \
-  go get github.com/robfig/glock; \
-  go get github.com/babinkos/docker-gen
+  set -ex; \
+  echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \
+  apk -U --no-cache add git ; \
+  cd /go/src; go version; env; go env; \
+  go get -v github.com/robfig/glock
+RUN go get -v github.com/babinkos/docker-gen
 RUN \
-  cd src/github.com/babinkos/docker-gen; \
+  cd /go/src/github.com/babinkos/docker-gen; \
   make get-deps
 RUN \
-  make release; \
+  make dist; \
   ll docker-gen*.tar.gz; \
   cp docker-gen*.tar.gz /artefacts; \
