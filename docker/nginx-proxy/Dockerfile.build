@@ -11,6 +11,6 @@ RUN \
   cd /go/src/github.com/babinkos/docker-gen; \
   make get-deps; \
   make release; \
-  ll docker-gen*.tar.gz; \
+  ls -l docker-gen*.tar.gz; \
   mkdir /artefacts; \
   cp docker-gen*.tar.gz /artefacts; \
