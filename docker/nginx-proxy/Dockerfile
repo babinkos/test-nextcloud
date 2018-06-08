@@ -7,5 +7,8 @@ RUN \
  set -ex; \
  echo "Downloading: https://$DOCKER_GEN_FORK/releases/download/$DOCKER_GEN_VERSION/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz"; \
  wget --quiet -O "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" "https://$DOCKER_GEN_FORK/releases/download/$DOCKER_GEN_VERSION/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
+ && ls -l "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
  && tar -C /usr/local/bin -xvzf "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
- && rm "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz"
+ && rm "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
+ && ls -l /usr/local/bin/docker-gen \
+ && /usr/local/bin/docker-gen -version
