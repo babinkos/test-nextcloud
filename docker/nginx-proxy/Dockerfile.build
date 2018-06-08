@@ -1,0 +1,11 @@
+FROM blang/golang-alpine
+RUN \
+  go get github.com/robfig/glock; \
+  go get github.com/babinkos/docker-gen
+RUN
+  cd src/github.com/babinkos/docker-gen; \
+  make get-deps
+RUN
+  make release; \
+  ll docker-gen*.tar.gz; \
+  cp docker-gen*.tar.gz /artefacts; \
