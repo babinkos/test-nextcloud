@@ -2,7 +2,7 @@ FROM jwilder/nginx-proxy:alpine
 LABEL maintainer="babinkos 37809416+babinkos@users.noreply.github.com"
 COPY *.sh /
 ENV DOCKER_GEN_FORK "github.com/babinkos/docker-gen"
-ENV DOCKER_GEN_VERSION "0.7.5-5"
+ENV DOCKER_GEN_VERSION "0.7.6"
 ENV DG_DIST "docker-gen-alpine-linux-musl-amd64"
 RUN \
   set -ex; \
