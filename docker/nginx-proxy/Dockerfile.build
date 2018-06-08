@@ -5,7 +5,9 @@ RUN \
   apk -U --no-cache add git gcc build-base ; \
   cd /go/src; go version; env; go env; \
   go get -v github.com/robfig/glock
-RUN go get -v github.com/babinkos/docker-gen
+RUN \
+  cd /go/src; \
+  go get -v github.com/babinkos/docker-gen; \
   cd /go/src/github.com/babinkos/docker-gen; \
   make get-deps
   make release; \
