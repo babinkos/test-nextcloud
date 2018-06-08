@@ -6,6 +6,8 @@ RUN \
   cd /go/src; go version; env; go env; \
   go get -v github.com/robfig/glock
 RUN go get -v github.com/babinkos/docker-gen
+RUN gcc --version; \
+  apk -U --no-cache add gcc ;
 RUN \
   cd /go/src/github.com/babinkos/docker-gen; \
   make get-deps
