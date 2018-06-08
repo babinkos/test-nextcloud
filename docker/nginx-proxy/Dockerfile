@@ -11,5 +11,8 @@ RUN \
  && tar -C /usr/local/bin -xvzf "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
  && rm "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
  && chown root:root /usr/local/bin/docker-gen \
- && ls -l /usr/local/bin/docker-gen \
- && /usr/local/bin/docker-gen -version
+ && ls -l /usr/local/bin/docker-gen
+# && /usr/local/bin/docker-gen -version
+#docker-gen <(echo '{{.Docker.CurrentContainerID}}')
+#docker-gen <(echo '{{.Docker.Version}}')
+RUN apk -U --no-cache add file 
