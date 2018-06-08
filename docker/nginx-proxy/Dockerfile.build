@@ -2,7 +2,7 @@ FROM blang/golang-alpine
 RUN \
   go get github.com/robfig/glock; \
   go get github.com/babinkos/docker-gen
-RUN
+RUN \
   cd src/github.com/babinkos/docker-gen; \
   make get-deps
 RUN
