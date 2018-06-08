@@ -1,3 +1,3 @@
 #!/bin/sh
 set -eu
-/bin/sleep 365d
+/bin/sleep 60d
