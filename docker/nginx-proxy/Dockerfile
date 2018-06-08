@@ -1,4 +1,4 @@
-FROM nginx-proxy:alpine
+FROM jwilder/nginx-proxy:alpine
 LABEL maintainer="babinkos 37809416+babinkos@users.noreply.github.com"
 ENV DOCKER_GEN_FORK "github.com/babinkos/docker-gen"
 ENV DOCKER_GEN_VERSION 0.7.5
