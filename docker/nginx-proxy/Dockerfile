@@ -10,5 +10,6 @@ RUN \
  && ls -l "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
  && tar -C /usr/local/bin -xvzf "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
  && rm "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
+ && chown root:root /usr/local/bin/docker-gen \
  && ls -l /usr/local/bin/docker-gen \
  && /usr/local/bin/docker-gen -version
