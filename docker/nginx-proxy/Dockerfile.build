@@ -6,7 +6,7 @@ RUN \
   cd /go/src; go version; env; go env; \
   go get -v github.com/robfig/glock
 RUN gcc --version; \
-    apk -U --no-cache add gcc linux-headers; \
+    apk -U --no-cache add gcc build-base; \
     gcc --version
 RUN go get -v github.com/babinkos/docker-gen
 RUN \
