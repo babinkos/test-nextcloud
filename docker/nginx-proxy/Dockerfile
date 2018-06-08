@@ -1,8 +1,9 @@
 FROM jwilder/nginx-proxy:alpine
 LABEL maintainer="babinkos 37809416+babinkos@users.noreply.github.com"
 ENV DOCKER_GEN_FORK "github.com/babinkos/docker-gen"
-ENV DOCKER_GEN_VERSION "0.7.5"
-ENV DG_DIST "docker-gen-alpine-linux-amd64"
+ENV DOCKER_GEN_VERSION "0.7.5-5-ga7b0311"
+ENV DG_DIST "docker-gen-alpine-linux-musl-amd64"
+RUN apk -U --no-cache add file
 RUN \
  set -ex; \
  echo "Downloading: https://$DOCKER_GEN_FORK/releases/download/$DOCKER_GEN_VERSION/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz"; \
@@ -11,8 +12,9 @@ RUN \
  && tar -C /usr/local/bin -xvzf "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
  && rm "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" \
  && chown root:root /usr/local/bin/docker-gen \
- && ls -l /usr/local/bin/docker-gen
-# && /usr/local/bin/docker-gen -version
-#docker-gen <(echo '{{.Docker.CurrentContainerID}}')
-#docker-gen <(echo '{{.Docker.Version}}')
-RUN apk -U --no-cache add file 
+ && ls -l /usr/local/bin/docker-gen \
+ && /usr/local/bin/docker-gen -version \
+ && echo "Docker.Version from docker-gen" \
+ && docker-gen <(echo '{{.Docker.Version}}') \
+ && echo "Docker.CurrentContainerID from docker-gen" \
+ && docker-gen <(echo '{{.Docker.CurrentContainerID}}')
