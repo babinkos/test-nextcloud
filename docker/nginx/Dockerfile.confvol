@@ -3,11 +3,13 @@ VOLUME ["/usr/local/etc/nginx"]
 COPY nginx.conf /nginx.conf
 COPY volconfinit.sh /volconfinit.sh
 COPY sleep.sh /sleep.sh
+COPY test-conffile.sh /test-conffile.sh
 RUN mkdir -p /usr/local/etc/nginx; \
  chmod +x /volconfinit.sh; \
- chmod +x /sleep.sh
+ chmod +x /sleep.sh; \
+ chmod +x /test-conffile.sh
 ENTRYPOINT ["/volconfinit.sh"]
 CMD ["/sleep.sh"]
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s \
         CMD \
-        ls /usr/local/etc/nginx/nginx.conf || exit 1
+        /test-conffile.sh || exit 1

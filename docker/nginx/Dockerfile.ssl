@@ -1,7 +1,12 @@
 FROM paulczar/omgwtfssl
 COPY sleep.sh /sleep.sh
 COPY ssl-entry.sh /ssl-entry.sh
+COPY test-echo.sh /test-echo.sh
 RUN chmod +x /sleep.sh; \
- chmod +x /ssl-entry.sh
+ chmod +x /ssl-entry.sh; \
+ chmod +x /test-echo.sh
 ENTRYPOINT ["/ssl-entry.sh"]
 CMD ["/sleep.sh"]
+HEALTHCHECK --interval=10s --timeout=3s --start-period=15s \
+        CMD \
+        /test-echo.sh || exit 1

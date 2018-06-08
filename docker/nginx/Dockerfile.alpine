@@ -4,11 +4,13 @@ RUN echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-rel
  apk add -U curl --no-cache; \
  rm -rf /var/cache/apk
 COPY www-2-nginx.sh /www-2-nginx.sh
-RUN chmod +x /www-2-nginx.sh
+VOPY test-http.sh /test-http.sh
+RUN chmod +x /www-2-nginx.sh; \
+    chmod +x /test-http.sh
 ENTRYPOINT ["/www-2-nginx.sh"]
 CMD ["nginx", "-g", "daemon off;"]
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s \
         CMD \
-        curl -f http://localhost:80/ping || exit 1
+        /test-http.sh || exit 1
 # use in AWS ECS in form of JSON string array: [ "CMD-SHELL", "curl -f http://localhost:80/ping || exit 1" ]
 # use in nginx-proxy: wget --quiet --tries=1 --spider http://localhost:80/ping || exit 1
