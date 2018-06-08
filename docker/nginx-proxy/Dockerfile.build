@@ -5,7 +5,7 @@ RUN \
 RUN \
   cd src/github.com/babinkos/docker-gen; \
   make get-deps
-RUN
+RUN \
   make release; \
   ll docker-gen*.tar.gz; \
   cp docker-gen*.tar.gz /artefacts; \
