@@ -5,6 +5,7 @@ RUN \
   apk -U --no-cache add git gcc build-base ; \
   cd /go/src; go version; env; go env; \
   go get -v github.com/robfig/glock
+ENV DOCKER_GEN_VERSION 0.7.6
 RUN \
   cd /go/src; \
   go get -v github.com/babinkos/docker-gen; \
