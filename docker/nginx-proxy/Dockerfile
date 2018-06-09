@@ -7,7 +7,7 @@ ENV DG_DIST "docker-gen-alpine-linux-musl-amd64"
 RUN \
   set -ex; \
   echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \
-  apk -U --no-cache add curl ; \
+  apk -U --no-cache add curl file; \
  echo "Downloading: https://$DOCKER_GEN_FORK/releases/download/$DOCKER_GEN_VERSION/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz"; \
  wget --quiet -O "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz" "https://$DOCKER_GEN_FORK/releases/download/$DOCKER_GEN_VERSION/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz"; \
  ls -l "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz"; \
@@ -15,6 +15,8 @@ RUN \
  rm "/tmp/$DG_DIST-$DOCKER_GEN_VERSION.tar.gz"; \
  chown root:root /usr/local/bin/docker-gen; \
  ls -l /usr/local/bin/docker-gen; \
+ file /usr/local/bin/docker-gen; \
+ /usr/local/bin/docker-gen --version; \
  chmod +x /*.sh
 HEALTHCHECK --interval=10s --timeout=3s --start-period=15s \
         CMD \
