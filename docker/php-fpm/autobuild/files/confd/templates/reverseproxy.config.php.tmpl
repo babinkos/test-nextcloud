@@ -1,0 +1,18 @@
+<?php
+$CONFIG = array (
+{{ if exists "/trusted/proxies" }}
+  "trusted_proxies"   => ['{{ getenv "TRUSTED_PROXIES" }}'],
+{{ end }}
+{{ if exists "/overwrite/host" }}
+  "overwritehost"     => "{{ getenv "OVERWRITE_HOST" }}",
+{{ end }}
+{{ if exists "/overwrite/protocol" }}
+  "overwriteprotocol"     => "{{ getenv "OVERWRITE_PROTOCOL" }}",
+{{ end }}
+{{ if exists "/overwrite/webroot" }}
+  "overwritewebroot"     => "{{ getenv "OVERWRITE_WEBROOT" }}",
+{{ end }}
+{{ if exists "/overwrite/condaddr" }}
+  "overwritecondaddr"     => "{{ getenv "OVERWRITE_CONDADDR" }}",
+{{ end }}
+);

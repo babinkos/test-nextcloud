@@ -1,0 +1,10 @@
+[template]
+src = "reverseproxy.config.php.tmpl"
+dest = "/usr/src/nextcloud/config/reverseproxy.config.php"
+keys = [
+    "/trusted/proxies",
+    "/overwrite/host",
+    "/overwrite/protocol",
+    "/overwrite/webroot",
+    "/overwrite/condaddr"
+]
