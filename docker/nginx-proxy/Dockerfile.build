@@ -2,9 +2,10 @@ FROM golang:1.10-alpine3.7 as builder
 WORKDIR /go/src
 RUN \
   set -ex; \
-  echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \
-  apk -U --no-cache add git gcc build-base ; \
-  go version; env; go env; \
+#  echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \
+  apk -U --no-cache add bzip2 git gcc build-base file upx; \
+  go version; env; go env
+RUN \
   go get -v github.com/robfig/glock; \
   go get -v github.com/babinkos/docker-gen; \
   cd github.com/babinkos/docker-gen; \
@@ -14,11 +15,38 @@ RUN \
   echo "wait 1 sec";\
   lsof GLOCKFILE; \
   make release; \
+#  dist/alpine-linux-musl/amd64/docker-gen --version; \
+  ls -l dist/alpine-linux-musl/amd64/docker-gen; \
+  upx -t dist/alpine-linux-musl/amd64/docker-gen; \
+  upx --brute dist/alpine-linux-musl/amd64/docker-gen; \
+  upx -t dist/alpine-linux-musl/amd64/docker-gen; \
+  ls -l dist/alpine-linux-musl/amd64/docker-gen; \
+  echo "Docker-gen version: "; \
   dist/alpine-linux-musl/amd64/docker-gen --version; \
+  file dist/alpine-linux-musl/amd64/docker-gen; \
+  sha256sum /go/src/github.com/babinkos/docker-gen/dist/alpine-linux-musl/amd64/docker-gen; \
+  sha256sum /go/src/github.com/babinkos/docker-gen/*.tar.gz; \
   ls -l docker-gen*.tar.gz
+
+ARG CONFD_VERSION=0.16.0
+ADD https://github.com/kelseyhightower/confd/archive/v${CONFD_VERSION}.tar.gz /tmp/
+RUN \
+    mkdir -p /go/src/github.com/kelseyhightower/confd && \
+    cd /go/src/github.com/kelseyhightower/confd && \
+    tar --strip-components=1 -zxf "/tmp/v${CONFD_VERSION}.tar.gz" && \
+    CC=$(which musl-gcc) go install --ldflags '-w -s -linkmode external -extldflags "-static"' github.com/kelseyhightower/confd && \
+    rm -rf "/tmp/v${CONFD_VERSION}.tar.gz"; \
+    ls -l /go/bin/confd; \
+    upx -t /go/bin/confd; \
+    upx --brute /go/bin/confd; \
+    upx -t /go/bin/confd; \
+    ls -l /go/bin/confd; \
+    file /go/bin/confd; \
+    sha256sum /go/bin/confd; \
+    /go/bin/confd -version
 
 FROM alpine:3.7
 LABEL description="https://github.com/babinkos/docker-gen"
 ENV DOCKER_GEN_VERSION 0.7.6
-COPY --from=builder /go/src/github.com/babinkos/docker-gen/*.tar.gz /artifacts/
+COPY --from=builder /go/bin/confd "/go/src/github.com/babinkos/docker-gen/*.tar.gz" /artifacts/
 WORKDIR /artifacts
