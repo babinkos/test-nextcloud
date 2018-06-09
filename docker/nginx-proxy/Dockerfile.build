@@ -1,17 +1,24 @@
-FROM golang:1.10-alpine3.7
+FROM golang:1.10-alpine3.7 as builder
+WORKDIR /go/src
 RUN \
   set -ex; \
   echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \
   apk -U --no-cache add git gcc build-base ; \
-  cd /go/src; go version; env; go env; \
-  go get -v github.com/robfig/glock
-ENV DOCKER_GEN_VERSION 0.7.6
-RUN \
-  cd /go/src; \
+  go version; env; go env; \
+  go get -v github.com/robfig/glock; \
   go get -v github.com/babinkos/docker-gen; \
-  cd /go/src/github.com/babinkos/docker-gen; \
+  cd github.com/babinkos/docker-gen; \
   make get-deps; \
+  lsof GLOCKFILE; \
+  sleep 1s; \
+  echo "wait 1 sec";\
+  lsof GLOCKFILE; \
   make release; \
-  ls -l docker-gen*.tar.gz; \
-  mkdir /artefacts; \
-  cp docker-gen*.tar.gz /artefacts; \
+  dist/alpine-linux-musl/amd64/docker-gen --version; \
+  ls -l docker-gen*.tar.gz
+
+FROM alpine:3.7
+LABEL description="https://github.com/babinkos/docker-gen"
+ENV DOCKER_GEN_VERSION 0.7.6
+COPY --from=builder /go/src/github.com/babinkos/docker-gen/*.tar.gz /artifacts/
+WORKDIR /artifacts
