@@ -1,12 +1,8 @@
-FROM golang:1.10-alpine3.7 as builder
+FROM my_build:subbuilder as builder
 WORKDIR /go/src
 RUN \
-  set -ex; \
-#  echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \
-  apk -U --no-cache add bzip2 git gcc build-base file upx; \
-  go version; env; go env
-RUN \
-  go get -v github.com/robfig/glock; \
+#  go get -v github.com/robfig/glock; \
+  go version; env; go env; \
   go get -v github.com/babinkos/docker-gen; \
   cd github.com/babinkos/docker-gen; \
   make get-deps; \
@@ -25,6 +21,7 @@ RUN \
   dist/alpine-linux-musl/amd64/docker-gen --version; \
   file dist/alpine-linux-musl/amd64/docker-gen; \
   sha256sum /go/src/github.com/babinkos/docker-gen/dist/alpine-linux-musl/amd64/docker-gen; \
+  tar -czvf /go/src/github.com/babinkos/docker-gen/docker-gen-alpine-linux-musl-amd64-0.7.6-1-gcdd1ad4-upx.tar.gz /go/src/github.com/babinkos/docker-gen/dist/alpine-linux-musl/amd64/docker-gen; \
   sha256sum /go/src/github.com/babinkos/docker-gen/*.tar.gz; \
   ls -l docker-gen*.tar.gz
 

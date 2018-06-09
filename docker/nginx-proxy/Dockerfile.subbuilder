@@ -1,0 +1,9 @@
+FROM golang:1.10-alpine3.7
+WORKDIR /go/src
+RUN \
+  set -ex; \
+#  echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \
+  apk -U --no-cache add bzip2 git gcc build-base file upx; \
+  go version; env; go env
+RUN \
+  go get -v github.com/robfig/glock
