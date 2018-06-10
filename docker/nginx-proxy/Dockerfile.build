@@ -16,7 +16,7 @@ RUN \
   make release; \
 #  dist/alpine-linux-musl/amd64/docker-gen --version; \
   ls -l dist/alpine-linux-musl/amd64/docker-gen; \
-  upx -t dist/alpine-linux-musl/amd64/docker-gen; \
+#  upx -t dist/alpine-linux-musl/amd64/docker-gen; \
   upx --brute dist/alpine-linux-musl/amd64/docker-gen; \
   upx -t dist/alpine-linux-musl/amd64/docker-gen; \
   ls -l dist/alpine-linux-musl/amd64/docker-gen; \
