@@ -4,7 +4,7 @@ RUN \
   set -ex; \
 #  go get -v github.com/robfig/glock; \
   go version; env; go env; \
-  go get -vd github.com/babinkos/docker-gen; \
+  go get -d github.com/babinkos/docker-gen; \
   cd github.com/babinkos/docker-gen; \
   export TAG=$(git describe --tags); \
   echo $TAG; \
