@@ -2,21 +2,13 @@ FROM k0s2018/test-nextcloud:docker-gen.subbuilder as builder
 WORKDIR /go/src
 RUN \
   set -ex; \
-#  go get -v github.com/robfig/glock; \
   go version; env; go env; \
   go get -d github.com/babinkos/docker-gen; \
   cd github.com/babinkos/docker-gen; \
   export TAG=$(git describe --tags); \
   echo $TAG; \
-#  make get-deps; \
-#  lsof GLOCKFILE; \
-#  sleep 5s; \
-#  echo "wait 1 sec";\
-#  lsof GLOCKFILE; \
   make release; \
-#  dist/alpine-linux-musl/amd64/docker-gen --version; \
   ls -l dist/alpine-linux-musl/amd64/docker-gen; \
-#  upx -t dist/alpine-linux-musl/amd64/docker-gen; \
   upx --brute dist/alpine-linux-musl/amd64/docker-gen; \
   upx -t dist/alpine-linux-musl/amd64/docker-gen; \
   ls -l dist/alpine-linux-musl/amd64/docker-gen; \
@@ -38,7 +30,6 @@ RUN \
     CC=$(which musl-gcc) go install --ldflags '-w -s -linkmode external -extldflags "-static"' github.com/kelseyhightower/confd && \
     rm -rf "/tmp/v${CONFD_VERSION}.tar.gz"; \
     ls -l /go/bin/confd; \
-    upx -t /go/bin/confd; \
     upx --brute /go/bin/confd; \
     upx -t /go/bin/confd; \
     ls -l /go/bin/confd; \
