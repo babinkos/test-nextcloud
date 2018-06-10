@@ -133,4 +133,4 @@ HEALTHCHECK --interval=10s --timeout=3s --start-period=30s \
         /ping.sh || exit 1
 COPY config/* /usr/src/nextcloud/config/
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["confd-start.sh"]
+CMD ["/confd-start.sh"]
