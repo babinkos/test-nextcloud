@@ -33,6 +33,8 @@ if version_greater "$installed_version" "$image_version"; then
 fi
 
 if version_greater "$image_version" "$installed_version"; then
+		echo "image version_greater then installed $image_version > $installed_version"
+		echo "rsync will take some time ..."
     if [ "$installed_version" != "0.0.0.0" ]; then
         run_as 'php /var/www/html/occ app:list' | sed -n "/Enabled:/,/Disabled:/p" > /tmp/list_before
     fi
@@ -48,12 +50,12 @@ if version_greater "$image_version" "$installed_version"; then
             rsync $rsync_options --include "/$dir/" --exclude '/*' /usr/src/nextcloud/ /var/www/html/
         fi
     done
-
+		echo "rsync from src to volume finished"
     if [ "$installed_version" != "0.0.0.0" ]; then
         run_as 'php /var/www/html/occ upgrade --no-app-disable'
 
         run_as 'php /var/www/html/occ app:list' | sed -n "/Enabled:/,/Disabled:/p" > /tmp/list_after
-        echo "The following apps have beed disabled:"
+        echo "The following apps have been disabled:"
         diff /tmp/list_before /tmp/list_after | grep '<' | cut -d- -f2 | cut -d: -f1
         rm -f /tmp/list_before /tmp/list_after
     fi
