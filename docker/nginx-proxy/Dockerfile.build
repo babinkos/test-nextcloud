@@ -5,11 +5,13 @@ RUN \
   go version; env; go env; \
   go get -v github.com/babinkos/docker-gen; \
   cd github.com/babinkos/docker-gen; \
-  make get-deps; \
+  export TAG=`git describe --tags`; \
+  echo $TAG; \
+#  make get-deps; \
   lsof GLOCKFILE; \
-  sleep 1s; \
-  echo "wait 1 sec";\
-  lsof GLOCKFILE; \
+#  sleep 5s; \
+#  echo "wait 1 sec";\
+#  lsof GLOCKFILE; \
   make release; \
 #  dist/alpine-linux-musl/amd64/docker-gen --version; \
   ls -l dist/alpine-linux-musl/amd64/docker-gen; \
@@ -21,7 +23,7 @@ RUN \
   dist/alpine-linux-musl/amd64/docker-gen --version; \
   file dist/alpine-linux-musl/amd64/docker-gen; \
   sha256sum /go/src/github.com/babinkos/docker-gen/dist/alpine-linux-musl/amd64/docker-gen; \
-  tar -czvf /go/src/github.com/babinkos/docker-gen/docker-gen-alpine-linux-musl-amd64-0.7.6-1-gcdd1ad4-upx.tar.gz /go/src/github.com/babinkos/docker-gen/dist/alpine-linux-musl/amd64/docker-gen; \
+  tar -czvf /go/src/github.com/babinkos/docker-gen/docker-gen-alpine-linux-musl-amd64-${TAG}-upx.tar.gz -C /go/src/github.com/babinkos/docker-gen/dist/alpine-linux-musl/amd64 docker-gen; \
   sha256sum /go/src/github.com/babinkos/docker-gen/*.tar.gz; \
   ls -l docker-gen*.tar.gz
 
@@ -45,5 +47,6 @@ RUN \
 FROM alpine:3.7
 LABEL description="https://github.com/babinkos/docker-gen"
 ENV DOCKER_GEN_VERSION 0.7.6
-COPY --from=builder /go/bin/confd "/go/src/github.com/babinkos/docker-gen/*.tar.gz" /artifacts/
+COPY --from=builder /go/bin/confd "/go/src/github.com/babinkos/docker-gen/*.tar.gz"\
+ /go/src/github.com/babinkos/docker-gen/dist/alpine-linux-musl/amd64/docker-gen /artifacts/
 WORKDIR /artifacts
