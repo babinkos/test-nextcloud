@@ -6,4 +6,14 @@ RUN \
   apk -U --no-cache add bzip2 git gcc build-base file upx; \
   go version; env; go env
 RUN \
-  go get -v github.com/robfig/glock
+  set -ex; \
+  go get -v github.com/robfig/glock; \
+  go get -vd github.com/BurntSushi/toml; \
+  go get -vd github.com/Microsoft/go-winio; \
+  go get -vd github.com/docker/docker; \
+  go get -vd github.com/docker/go-units; \
+  go get -vd github.com/fsouza/go-dockerclient; \
+  go get -vd github.com/gorilla/context; \
+  go get -vd github.com/gorilla/mux; \
+  go get -vd golang.org/x/net; \
+  go get -vd golang.org/x/sys; \

@@ -1,14 +1,15 @@
 FROM k0s2018/test-nextcloud:docker-gen.subbuilder as builder
 WORKDIR /go/src
 RUN \
+  set -ex; \
 #  go get -v github.com/robfig/glock; \
   go version; env; go env; \
-  go get -v github.com/babinkos/docker-gen; \
+  go get -vd github.com/babinkos/docker-gen; \
   cd github.com/babinkos/docker-gen; \
-  export TAG=`git describe --tags`; \
+  export TAG=$(git describe --tags); \
   echo $TAG; \
 #  make get-deps; \
-  lsof GLOCKFILE; \
+#  lsof GLOCKFILE; \
 #  sleep 5s; \
 #  echo "wait 1 sec";\
 #  lsof GLOCKFILE; \
@@ -30,6 +31,7 @@ RUN \
 ARG CONFD_VERSION=0.16.0
 ADD https://github.com/kelseyhightower/confd/archive/v${CONFD_VERSION}.tar.gz /tmp/
 RUN \
+    set -ex; \
     mkdir -p /go/src/github.com/kelseyhightower/confd && \
     cd /go/src/github.com/kelseyhightower/confd && \
     tar --strip-components=1 -zxf "/tmp/v${CONFD_VERSION}.tar.gz" && \
