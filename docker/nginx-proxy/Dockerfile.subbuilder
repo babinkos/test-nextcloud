@@ -1,5 +1,6 @@
 FROM golang:1.10-alpine3.7
 WORKDIR /go/src
+COPY GLOCKFILE /tmp/GLOCKFILE
 RUN \
   set -ex; \
 #  echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \
@@ -8,12 +9,4 @@ RUN \
 RUN \
   set -ex; \
   go get -v github.com/robfig/glock; \
-  go get -v -d github.com/BurntSushi/toml; \
-  go get -v -d github.com/Microsoft/go-winio; \
-  go get -v -d github.com/docker/docker; \
-  go get -v -d github.com/docker/go-units; \
-  go get -v -d github.com/fsouza/go-dockerclient; \
-  go get -v -d github.com/gorilla/context; \
-  go get -v -d github.com/gorilla/mux; \
-  go get -v -d golang.org/x/net; \
-  go get -v -d golang.org/x/sys; \
+  glock sync -n < /tmp/GLOCKFILE
