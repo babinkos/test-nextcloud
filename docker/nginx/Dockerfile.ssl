@@ -1,7 +1,7 @@
 FROM paulczar/omgwtfssl
-COPY sleep.sh /sleep.sh
-COPY ssl-entry.sh /ssl-entry.sh
-COPY test-echo.sh /test-echo.sh
+COPY sleep.sh ssl-entry.sh test-echo.sh /
+#COPY ssl-entry.sh /ssl-entry.sh
+#COPY test-echo.sh /test-echo.sh
 RUN chmod +x /sleep.sh; \
  chmod +x /ssl-entry.sh; \
  chmod +x /test-echo.sh

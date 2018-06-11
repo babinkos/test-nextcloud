@@ -9,7 +9,8 @@ RUN mkdir -p /usr/local/etc/nginx; \
  chmod +x /volconfinit.sh; \
  chmod +x /sleep.sh; \
  chmod +x /test-conffile.sh; \
- chmod +x  /usr/local/bin/confd
+ chmod +x  /usr/local/bin/confd; \
+ /usr/local/bin/confd -version
 ENTRYPOINT ["/volconfinit.sh"]
 CMD ["/sleep.sh"]
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s \

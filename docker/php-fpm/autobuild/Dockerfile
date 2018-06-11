@@ -105,7 +105,7 @@ RUN set -ex; \
     chmod -R g=u /var/www; \
 #    set -ex; \
     apk add --virtual .fetch-deps \
-        bzip2 \
+#        bzip2 \
         gnupg \
     ; echo "nextcloud version=${NEXTCLOUD_VERSION}"; ls -l; \
     curl -fsSL -o nextcloud.tar.bz2 \
