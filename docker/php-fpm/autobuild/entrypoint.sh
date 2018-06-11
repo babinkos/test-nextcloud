@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eu
-
+/usr/local/bin/confd -onetime -backend env
 # version_greater A B returns whether A > B
 version_greater() {
 	[ "$(printf '%s\n' "$@" | sort -t '.' -n -k1,1 -k2,2 -k3,3 -k4,4 | head -n 1)" != "$1" ]
