@@ -1,6 +1,6 @@
 #!/bin/sh
 if [ ! -d /var/www/html/config/ ]; then
-  echo "something gone wrong - /var/www/html/config/config.php missing after entrypoint"
+  echo "something gone wrong - /var/www/html/config/ directory missing after entrypoint"
   echo "need to bootstrap volume again"
 #  if [ "$(id -u)" = 0 ]; then
 #        rsync_options="-rlDog --chown www-data:root"

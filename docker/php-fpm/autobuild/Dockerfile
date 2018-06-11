@@ -20,9 +20,11 @@ RUN set -ex; \
 #    if [ ! -f /tmp/nextcloud.asc ]; then echo '/tmp/nexctloud.asc not found';curl -fsSL -o /tmp/nextcloud.asc 'https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc';else echo 'nexctloud.asc copied from build context directory'; fi;\
 #    echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories;\
     apk -q add -U \
+        bzip2 \
+        fcgi \
         rsync \
-        fcgi; \
-    echo "$(ls -l /*.apk | wc -l) apk packages were copied from previous build stage image"; \
+        zip; \
+#    echo "$(ls -l /*.apk | wc -l) apk packages were copied from previous build stage image"; \
     rm /var/spool/cron/crontabs/root; \
     echo '*/15 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data;\
 # install the PHP extensions we need (+adding bz2, gmp, imagick, imap with bzip2-dev gmp-dev imagemagick-dev imap-dev krb5-dev )
@@ -37,6 +39,8 @@ RUN set -ex; \
         imagemagick-dev \
         imap-dev \
         krb5-dev \
+        libbz2 \
+        libzip \
         libjpeg-turbo-dev \
         libpng-dev \
         libmemcached-dev \
@@ -48,6 +52,7 @@ RUN set -ex; \
     docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr > /dev/null; \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl > /dev/null; \
     docker-php-ext-configure ldap > /dev/null; \
+    docker-php-ext-configure zip --with-libzip > /dev/null; \
     docker-php-ext-install -j$(nproc) \
         bz2 \
         exif \
