@@ -6,7 +6,7 @@ RUN \
   go get -d github.com/babinkos/docker-gen; \
   cd github.com/babinkos/docker-gen; \
   export TAG=$(git describe --tags); \
-  echo $TAG; \
+  echo "$TAG"; \
   make release; \
   ls -l dist/alpine-linux-musl/amd64/docker-gen; \
   upx --brute dist/alpine-linux-musl/amd64/docker-gen; \
