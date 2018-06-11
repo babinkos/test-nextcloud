@@ -5,6 +5,7 @@ COPY files/confd /etc/confd/
 COPY volconfinit.sh sleep.sh test-conffile.sh /
 #COPY sleep.sh /sleep.sh
 #COPY test-conffile.sh /test-conffile.sh
+# use environment variable for this container "PHP_UPSTREAM_HOST"="container name with php-fcgi"
 RUN mkdir -p /usr/local/etc/nginx; \
  chmod +x /volconfinit.sh; \
  chmod +x /sleep.sh; \
