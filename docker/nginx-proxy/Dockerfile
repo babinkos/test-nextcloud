@@ -21,6 +21,7 @@ RUN \
  chmod +x /usr/local/bin/docker-gen; \
  ls -l /usr/local/bin/docker-gen; \
  file /usr/local/bin/docker-gen; \
+ sync; \
  /usr/local/bin/docker-gen --version; \
  chmod +x /*.sh
 HEALTHCHECK --interval=10s --timeout=3s --start-period=15s \

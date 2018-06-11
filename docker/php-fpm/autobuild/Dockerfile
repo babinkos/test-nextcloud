@@ -16,6 +16,7 @@ RUN set -ex; \
 #    gzip -d /usr/local/bin/confd.gz; \
     chmod +x /*.sh; \
     chmod +x /usr/local/bin/confd; \
+    sync;
     /usr/local/bin/confd -version; \
 #    if [ ! -f /tmp/nextcloud.asc ]; then echo '/tmp/nexctloud.asc not found';curl -fsSL -o /tmp/nextcloud.asc 'https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc';else echo 'nexctloud.asc copied from build context directory'; fi;\
 #    echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories;\
