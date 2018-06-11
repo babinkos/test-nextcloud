@@ -1,13 +1,15 @@
 FROM alpine:3.7
 VOLUME ["/usr/local/etc/nginx"]
-COPY nginx.conf /nginx.conf
-COPY volconfinit.sh /volconfinit.sh
-COPY sleep.sh /sleep.sh
-COPY test-conffile.sh /test-conffile.sh
+COPY --from=docker.io/k0s2018/test-nextcloud:docker-gen.builder /artifacts/confd /usr/local/bin/
+COPY files/confd /etc/confd/
+COPY volconfinit.sh sleep.sh test-conffile.sh /
+#COPY sleep.sh /sleep.sh
+#COPY test-conffile.sh /test-conffile.sh
 RUN mkdir -p /usr/local/etc/nginx; \
  chmod +x /volconfinit.sh; \
  chmod +x /sleep.sh; \
- chmod +x /test-conffile.sh
+ chmod +x /test-conffile.sh; \
+ chmod +x  /usr/local/bin/confd
 ENTRYPOINT ["/volconfinit.sh"]
 CMD ["/sleep.sh"]
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s \

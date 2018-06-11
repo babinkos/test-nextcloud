@@ -1,0 +1,6 @@
+[template]
+src = "nginx.conf.tmpl"
+dest = "/usr/local/etc/nginx/nginx.conf"
+keys = [
+    "/php/upstream/host"
+]
