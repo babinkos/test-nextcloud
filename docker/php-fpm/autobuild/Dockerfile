@@ -40,7 +40,7 @@ RUN set -ex; \
         imap-dev \
         krb5-dev \
         libbz2 \
-        libzip \
+        libzip-dev \
         libjpeg-turbo-dev \
         libpng-dev \
         libmemcached-dev \
