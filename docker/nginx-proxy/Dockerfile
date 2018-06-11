@@ -1,4 +1,4 @@
-FROM docker.io/k0s2018/test-nextcloud:docker-gen.builder as builder
+#FROM  as builder
 FROM jwilder/nginx-proxy:alpine
 LABEL maintainer="babinkos 37809416+babinkos@users.noreply.github.com"
 COPY *.sh /
@@ -6,7 +6,7 @@ ENV DOCKER_GEN_FORK "github.com/babinkos/docker-gen"
 ENV DOCKER_GEN_VERSION "0.7.6"
 ENV DG_DIST "docker-gen-alpine-linux-musl-amd64"
 #ENV DG_TARGZ "docker-gen-alpine-linux-musl-amd64-0.7.6-1-gcdd1ad4-upx.tar.gz"
-COPY --from=builder /artifacts/docker-gen /usr/local/bin/docker-gen
+COPY --from=docker.io/k0s2018/test-nextcloud:docker-gen.builder /artifacts/docker-gen /usr/local/bin/
 RUN \
  set -ex; \
 #  echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \

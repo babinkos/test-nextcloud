@@ -1,5 +1,5 @@
 # based on nextcloud:fpm-alpine sources
-FROM docker.io/k0s2018/test-nextcloud:docker-gen.builder as builder
+#FROM  as builder
 FROM php:7.2-fpm-alpine3.7
 COPY *.sh /
 COPY nextcloud.asc /tmp/nextcloud.asc
@@ -7,8 +7,8 @@ COPY nextcloud.asc /tmp/nextcloud.asc
 #COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /var/cache/ /var/cache/
 ENV NEXTCLOUD_VERSION 13.0.2
 #ADD https://github.com/babinkos/docker-gen/releases/download/0.7.6/confd.gz /usr/local/bin/confd.gz
-COPY --from=builder /artifacts/confd /usr/local/bin/confd
-COPY files/confd /etc/confd
+COPY --from=docker.io/k0s2018/test-nextcloud:docker-gen.builder /artifacts/confd /usr/local/bin/
+COPY files/confd /etc/confd/
 VOLUME /var/www/html
 #ADD "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" /usr/src/
 # entrypoint.sh and cron.sh dependencies
@@ -17,7 +17,7 @@ RUN set -ex; \
     chmod +x /*.sh; \
     chmod +x /usr/local/bin/confd; \
     /usr/local/bin/confd -version; \
-    if [ ! -f /tmp/nextcloud.asc ]; then echo '/tmp/nexctloud.asc not found';curl -fsSL -o /tmp/nextcloud.asc 'https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc';else echo 'nexctloud.asc copied from build context directory'; fi;\
+#    if [ ! -f /tmp/nextcloud.asc ]; then echo '/tmp/nexctloud.asc not found';curl -fsSL -o /tmp/nextcloud.asc 'https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc';else echo 'nexctloud.asc copied from build context directory'; fi;\
 #    echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories;\
     apk -q add -U \
         rsync \
