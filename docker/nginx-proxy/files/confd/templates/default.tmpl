@@ -1,0 +1,14 @@
+location ~ \.(?:css|js|woff|svg|gif|png|html|ttf|ico|jpg|jpeg)$ {
+  access_log off;
+  proxy_pass http://{{ getenv "PUBLIC_FQDN" }};
+}
+location ~ ^/(status|ping)$ {
+  access_log off;
+  proxy_pass http://{{ getenv "PUBLIC_FQDN" }};
+}
+error_page 500 502 503 504 @error;
+
+location @error {
+  root /usr/share/nginx/html;
+  try_files $uri /error.html /error.html;
+}

@@ -137,7 +137,9 @@ RUN set -ex; \
     echo 'pm.status_path = /status' >> /usr/local/etc/php-fpm.d/www.conf
 # to get fpm status use command ping or status like this: SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000
 COPY config/* /usr/src/nextcloud/config/
-RUN chown -R www-data:root /usr/src/nextcloud/
+RUN \
+  chown -R www-data:root /usr/src/nextcloud/ ; \
+  echo "Nextcloud version $(php -r 'require "/var/www/html/version.php"; echo implode(".", $OC_Version);') is packaged into image."
 HEALTHCHECK --interval=10s --timeout=3s --start-period=30s \
         CMD \
         /ping.sh || exit 1

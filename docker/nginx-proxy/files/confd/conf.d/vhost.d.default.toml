@@ -1,0 +1,6 @@
+[template]
+src = "default.tmpl"
+dest = "/etc/nginx/vhost.d/default"
+keys = [
+    "/public/fqdn"
+]

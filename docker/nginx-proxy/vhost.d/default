@@ -1,6 +1,0 @@
-location ~ \.(?:css|js|woff|svg|gif|png|html|ttf|ico|jpg|jpeg)$ {
-  access_log off;
-}
-location ~ ^/(status|ping)$ {
-  access_log off;
-}

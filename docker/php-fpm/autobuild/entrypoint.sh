@@ -34,23 +34,23 @@ fi
 
 if version_greater "$image_version" "$installed_version"; then
 		echo "image version_greater then installed $image_version > $installed_version"
-		echo "rsync will take some time ..."
+		echo "started at $(date) ; rsync will take some time ..."
     if [ "$installed_version" != "0.0.0.0" ]; then
         run_as 'php /var/www/html/occ app:list' | sed -n "/Enabled:/,/Disabled:/p" > /tmp/list_before
     fi
     if [ "$(id -u)" = 0 ]; then
-      rsync_options="-vrlDog --chown www-data:root"
+      rsync_options="-vcrlDog --chown www-data:root"
     else
-      rsync_options="-vrlD"
+      rsync_options="-vcrlD"
     fi
-    rsync $rsync_options --delete --exclude /config/ --exclude /data/ --exclude /custom_apps/ --exclude /themes/ /usr/src/nextcloud/ /var/www/html/
+    time rsync $rsync_options --delete --exclude /config/ --exclude /data/ --exclude /custom_apps/ --exclude /themes/ /usr/src/nextcloud/ /var/www/html/
 
     for dir in config data custom_apps themes; do
         if [ ! -d "/var/www/html/$dir" ] || directory_empty "/var/www/html/$dir"; then
-            rsync $rsync_options --include "/$dir/" --exclude '/*' /usr/src/nextcloud/ /var/www/html/
+            time rsync $rsync_options --include "/$dir/" --exclude '/*' /usr/src/nextcloud/ /var/www/html/
         fi
     done
-		echo "rsync from src to volume finished"
+		echo "rsync from src to volume finished at $(date)"
     if [ "$installed_version" != "0.0.0.0" ]; then
         run_as 'php /var/www/html/occ upgrade --no-app-disable'
 

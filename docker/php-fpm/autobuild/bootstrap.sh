@@ -1,7 +1,7 @@
 #!/bin/sh
 if [ ! -d /var/www/html/config/ ]; then
   echo "something gone wrong - /var/www/html/config/ directory missing after entrypoint"
-  echo "need to bootstrap volume again"
+  echo "need to bootstrap volume again: please remove version.php and config directory from nextcloud volume root"
 #  if [ "$(id -u)" = 0 ]; then
 #        rsync_options="-rlDog --chown www-data:root"
 #    else
