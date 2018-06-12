@@ -29,7 +29,9 @@ RUN \
  /usr/local/bin/docker-gen --version; \
  /usr/local/bin/confd -version; \
  chmod +x /*.sh
+WORKDIR /app/ 
 HEALTHCHECK --interval=10s --timeout=3s --start-period=15s \
         CMD \
         /test-https.sh || exit 1
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["forego", "start", "-r"]
