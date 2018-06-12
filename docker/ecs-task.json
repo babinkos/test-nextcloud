@@ -1,0 +1,417 @@
+{
+  "executionRoleArn": null,
+  "containerDefinitions": [
+    {
+      "dnsSearchDomains": null,
+      "logConfiguration": {
+        "logDriver": "json-file",
+        "options": null
+      },
+      "entryPoint": [],
+      "portMappings": [],
+      "command": [],
+      "linuxParameters": null,
+      "cpu": 0,
+      "environment": [
+        {
+          "name": "OVERWRITE_HOST",
+          "value": "ec2-35-157-231-211.eu-central-1.compute.amazonaws.com"
+        },
+        {
+          "name": "TRUSTED_PROXIES",
+          "value": "['172.17.0.0/16']"
+        }
+      ],
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [
+        {
+          "readOnly": null,
+          "containerPath": "/var/www/html",
+          "sourceVolume": "nextcloud"
+        }
+      ],
+      "workingDirectory": null,
+      "dockerSecurityOptions": null,
+      "memory": 500,
+      "memoryReservation": 64,
+      "volumesFrom": [],
+      "image": "docker.io/k0s2018/test-nextcloud:nextcloud.latest",
+      "disableNetworking": null,
+      "healthCheck": {
+        "retries": 3,
+        "command": [
+          "/ping.sh"
+        ],
+        "timeout": 5,
+        "interval": 10,
+        "startPeriod": 10
+      },
+      "essential": false,
+      "links": [],
+      "hostname": null,
+      "extraHosts": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "privileged": null,
+      "name": "app"
+    },
+    {
+      "dnsSearchDomains": null,
+      "logConfiguration": {
+        "logDriver": "json-file",
+        "options": null
+      },
+      "entryPoint": null,
+      "portMappings": [],
+      "command": null,
+      "linuxParameters": null,
+      "cpu": 0,
+      "environment": [
+        {
+          "name": "VIRTUAL_HOST",
+          "value": "ec2-35-157-231-211.eu-central-1.compute.amazonaws.com"
+        }
+      ],
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [
+        {
+          "readOnly": true,
+          "containerPath": "/usr/local/etc/nginx",
+          "sourceVolume": "nginx_conf"
+        },
+        {
+          "readOnly": true,
+          "containerPath": "/var/www/html",
+          "sourceVolume": "nextcloud"
+        }
+      ],
+      "workingDirectory": null,
+      "dockerSecurityOptions": null,
+      "memory": 500,
+      "memoryReservation": 64,
+      "volumesFrom": [],
+      "image": "docker.io/k0s2018/test-nextcloud:nginx.alpine",
+      "disableNetworking": null,
+      "healthCheck": {
+        "retries": 9,
+        "command": [
+          "/test-http.sh"
+        ],
+        "timeout": 5,
+        "interval": 10,
+        "startPeriod": 5
+      },
+      "essential": false,
+      "links": [
+        "app",
+        "confvol"
+      ],
+      "hostname": null,
+      "extraHosts": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "privileged": null,
+      "name": "nginx"
+    },
+    {
+      "dnsSearchDomains": null,
+      "logConfiguration": {
+        "logDriver": "json-file",
+        "options": null
+      },
+      "entryPoint": null,
+      "portMappings": [],
+      "command": null,
+      "linuxParameters": null,
+      "cpu": 0,
+      "environment": [
+        {
+          "name": "PHP_UPSTREAM_HOST",
+          "value": "app"
+        }
+      ],
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [
+        {
+          "readOnly": null,
+          "containerPath": "/usr/local/etc/nginx",
+          "sourceVolume": "nginx_conf"
+        }
+      ],
+      "workingDirectory": null,
+      "dockerSecurityOptions": null,
+      "memory": 64,
+      "memoryReservation": null,
+      "volumesFrom": [],
+      "image": "docker.io/k0s2018/test-nextcloud:nginx.config.volume.init",
+      "disableNetworking": null,
+      "healthCheck": {
+        "retries": 2,
+        "command": [
+          "/test-conffile.sh"
+        ],
+        "timeout": 2,
+        "interval": 5,
+        "startPeriod": 3
+      },
+      "essential": true,
+      "links": null,
+      "hostname": null,
+      "extraHosts": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "privileged": null,
+      "name": "confvol"
+    },
+    {
+      "dnsSearchDomains": null,
+      "logConfiguration": {
+        "logDriver": "json-file",
+        "options": null
+      },
+      "entryPoint": null,
+      "portMappings": [],
+      "command": null,
+      "linuxParameters": null,
+      "cpu": 0,
+      "environment": [
+        {
+          "name": "CA_SUBJECT",
+          "value": "noreply@tth.cl"
+        },
+        {
+          "name": "SSL_CERT",
+          "value": "/certs/ec2-35-157-231-211.eu-central-1.compute.amazonaws.com.crt"
+        },
+        {
+          "name": "SSL_CSR",
+          "value": "/certs/ec2-35-157-231-211.eu-central-1.compute.amazonaws.com.csr"
+        },
+        {
+          "name": "SSL_KEY",
+          "value": "/certs/ec2-35-157-231-211.eu-central-1.compute.amazonaws.com.key"
+        },
+        {
+          "name": "SSL_SUBJECT",
+          "value": "ec2-35-157-231-211.eu-central-1.compute.amazonaws.com"
+        }
+      ],
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [
+        {
+          "readOnly": null,
+          "containerPath": "/certs",
+          "sourceVolume": "certs"
+        }
+      ],
+      "workingDirectory": null,
+      "dockerSecurityOptions": null,
+      "memory": 300,
+      "memoryReservation": null,
+      "volumesFrom": [],
+      "image": "docker.io/k0s2018/test-nextcloud:self.ssl",
+      "disableNetworking": null,
+      "healthCheck": {
+        "retries": 2,
+        "command": [
+          "/test-echo.sh"
+        ],
+        "timeout": 2,
+        "interval": 10,
+        "startPeriod": 3
+      },
+      "essential": false,
+      "links": null,
+      "hostname": null,
+      "extraHosts": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "privileged": null,
+      "name": "ssl"
+    },
+    {
+      "dnsSearchDomains": null,
+      "logConfiguration": {
+        "logDriver": "json-file",
+        "options": null
+      },
+      "entryPoint": null,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "protocol": "tcp",
+          "containerPort": 80
+        },
+        {
+          "hostPort": 443,
+          "protocol": "tcp",
+          "containerPort": 443
+        }
+      ],
+      "command": null,
+      "linuxParameters": null,
+      "cpu": 0,
+      "environment": [
+        {
+          "name": "MAX_UPLOAD_SIZE",
+          "value": "10GB"
+        },
+        {
+          "name": "PUBLIC_FQDN",
+          "value": "ec2-35-157-231-211.eu-central-1.compute.amazonaws.com"
+        }
+      ],
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [
+        {
+          "readOnly": true,
+          "containerPath": "/etc/nginx/certs",
+          "sourceVolume": "certs"
+        },
+        {
+          "readOnly": null,
+          "containerPath": "/etc/nginx/vhost.d",
+          "sourceVolume": "vhostd"
+        },
+        {
+          "readOnly": null,
+          "containerPath": "/usr/share/nginx/html",
+          "sourceVolume": "html"
+        },
+        {
+          "readOnly": true,
+          "containerPath": "/tmp/docker.sock",
+          "sourceVolume": "docker-sock"
+        },
+        {
+          "readOnly": null,
+          "containerPath": "/etc/nginx/dhparam",
+          "sourceVolume": "dhparam"
+        }
+      ],
+      "workingDirectory": null,
+      "dockerSecurityOptions": null,
+      "memory": 256,
+      "memoryReservation": null,
+      "volumesFrom": [],
+      "image": "docker.io/k0s2018/test-nextcloud:nginx-proxy",
+      "disableNetworking": null,
+      "healthCheck": {
+        "retries": 3,
+        "command": [
+          "/test-https.sh"
+        ],
+        "timeout": 3,
+        "interval": 10,
+        "startPeriod": 3
+      },
+      "essential": false,
+      "links": [],
+      "hostname": null,
+      "extraHosts": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "privileged": null,
+      "name": "proxy"
+    }
+  ],
+  "placementConstraints": [],
+  "memory": null,
+  "taskRoleArn": null,
+  "compatibilities": [
+    "EC2"
+  ],
+  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:343089639354:task-definition/php-fpm-nextcloud-13-0-2:25",
+  "family": "php-fpm-nextcloud-13-0-2",
+  "requiresAttributes": [
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.container-health-check"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.logging-driver.json-file"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+    }
+  ],
+  "requiresCompatibilities": null,
+  "networkMode": null,
+  "cpu": null,
+  "revision": 25,
+  "status": "ACTIVE",
+  "volumes": [
+    {
+      "name": "nextcloud",
+      "host": {
+        "sourcePath": "/mnt/efs/nextcloud"
+      }
+    },
+    {
+      "name": "nginx_conf",
+      "host": {
+        "sourcePath": "/mnt/efs/nginx/"
+      }
+    },
+    {
+      "name": "docker-sock",
+      "host": {
+        "sourcePath": "/var/run/docker.sock"
+      }
+    },
+    {
+      "name": "certs",
+      "host": {
+        "sourcePath": "/mnt/efs/certs"
+      }
+    },
+    {
+      "name": "vhostd",
+      "host": {
+        "sourcePath": "/mnt/efs/vhostd"
+      }
+    },
+    {
+      "name": "html",
+      "host": {
+        "sourcePath": "/mnt/efs/html"
+      }
+    },
+    {
+      "name": "dhparam",
+      "host": {
+        "sourcePath": "/mnt/efs/dhparam"
+      }
+    }
+  ]
+}

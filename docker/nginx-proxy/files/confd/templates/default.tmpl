@@ -4,6 +4,10 @@ location ~ \.(?:css|js|woff|svg|gif|png|html|ttf|ico|jpg|jpeg)$ {
 }
 location ~ ^/(status|ping)$ {
   access_log off;
+  allow 127.0.0.1;
+  #Default Docker subnet
+  allow 172.17.0.0/16;
+  deny all;
   proxy_pass http://{{ getenv "PUBLIC_FQDN" }};
 }
 error_page 500 502 503 504 @error;
@@ -11,4 +15,8 @@ error_page 500 502 503 504 @error;
 location @error {
   root /usr/share/nginx/html;
   try_files $uri /error.html /error.html;
+}
+
+location /get_error {
+    return 500;
 }
