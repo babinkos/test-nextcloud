@@ -22,7 +22,7 @@ RUN \
  chmod +x /usr/local/bin/docker-gen; \
  chown root:root /usr/local/bin/confd; \
  chmod +x /usr/local/bin/confd; \
- chmod +x /pre-entrypoint.sh; \
+ chmod +x /entrypoint.sh; \
  ls -l /usr/local/bin/docker-gen; \
  file /usr/local/bin/docker-gen; \
  sync; \
