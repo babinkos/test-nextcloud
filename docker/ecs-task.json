@@ -18,6 +18,26 @@
           "value": "ec2-35-157-231-211.eu-central-1.compute.amazonaws.com"
         },
         {
+          "name": "POSTGRES_DB",
+          "value": "nc_13_02"
+        },
+        {
+          "name": "POSTGRES_HOST",
+          "value": "mypg96.cfe3ga36mfaf.eu-central-1.rds.amazonaws.com"
+        },
+        {
+          "name": "POSTGRES_PASSWORD",
+          "value": "MyPostGreRoot18"
+        },
+        {
+          "name": "POSTGRES_USER",
+          "value": "pgroot96"
+        },
+        {
+          "name": "REDIS_HOSTNAME",
+          "value": "redis"
+        },
+        {
           "name": "TRUSTED_PROXIES",
           "value": "['172.17.0.0/16']"
         }
@@ -48,7 +68,9 @@
         "startPeriod": 10
       },
       "essential": false,
-      "links": [],
+      "links": [
+        "redis"
+      ],
       "hostname": null,
       "extraHosts": null,
       "user": null,
@@ -283,11 +305,6 @@
           "sourceVolume": "vhostd"
         },
         {
-          "readOnly": null,
-          "containerPath": "/usr/share/nginx/html",
-          "sourceVolume": "html"
-        },
-        {
           "readOnly": true,
           "containerPath": "/tmp/docker.sock",
           "sourceVolume": "docker-sock"
@@ -323,6 +340,58 @@
       "dockerLabels": null,
       "privileged": null,
       "name": "proxy"
+    },
+    {
+      "dnsSearchDomains": null,
+      "logConfiguration": {
+        "logDriver": "json-file",
+        "options": null
+      },
+      "entryPoint": null,
+      "portMappings": [],
+      "command": null,
+      "linuxParameters": null,
+      "cpu": 0,
+      "environment": [
+        {
+          "name": "REDIS_MAXMEM",
+          "value": "128m"
+        }
+      ],
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [
+        {
+          "readOnly": null,
+          "containerPath": "/data",
+          "sourceVolume": "redis"
+        }
+      ],
+      "workingDirectory": null,
+      "dockerSecurityOptions": null,
+      "memory": 140,
+      "memoryReservation": null,
+      "volumesFrom": [],
+      "image": "docker.io/k0s2018/test-nextcloud:redis",
+      "disableNetworking": null,
+      "healthCheck": {
+        "retries": 3,
+        "command": [
+          "/usr/local/bin/redis.healthcheck.sh"
+        ],
+        "timeout": 3,
+        "interval": 10,
+        "startPeriod": 5
+      },
+      "essential": false,
+      "links": null,
+      "hostname": null,
+      "extraHosts": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "privileged": null,
+      "name": "redis"
     }
   ],
   "placementConstraints": [],
@@ -331,7 +400,7 @@
   "compatibilities": [
     "EC2"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:343089639354:task-definition/php-fpm-nextcloud-13-0-2:25",
+  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:343089639354:task-definition/php-fpm-nextcloud-13-0-2:29",
   "family": "php-fpm-nextcloud-13-0-2",
   "requiresAttributes": [
     {
@@ -368,7 +437,7 @@
   "requiresCompatibilities": null,
   "networkMode": null,
   "cpu": null,
-  "revision": 25,
+  "revision": 29,
   "status": "ACTIVE",
   "volumes": [
     {
@@ -411,6 +480,12 @@
       "name": "dhparam",
       "host": {
         "sourcePath": "/mnt/efs/dhparam"
+      }
+    },
+    {
+      "name": "redis",
+      "host": {
+        "sourcePath": "/mnt/efs/redis"
       }
     }
   ]

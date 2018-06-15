@@ -2,7 +2,7 @@
 $CONFIG = array ({{ if exists "/redis/hostname" }}
 'redis' => array(
   'host' => '{{ getenv "REDIS_HOSTNAME" }}',
-  'port' => {{ getenv "REDIS_PORT" "6379" }},
+  'port' => {{ if exists "/redis/port" }}{{ getenv "REDIS_PORT" }}{{ else }}6379{{ end }},
   'timeout' => {{ getenv "REDIS_TIMEOUT" "0.0" }},
   'password' => '{{ getenv "REDIS_PASSWORD" "ChangeMePassword123456789" }}',
       ),
