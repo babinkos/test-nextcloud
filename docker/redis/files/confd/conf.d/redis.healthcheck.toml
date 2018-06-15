@@ -1,0 +1,6 @@
+[template]
+src = "redis.healthcheck.sh.tmpl"
+dest = "/usr/local/bin/redis.healthcheck.sh"
+keys = [
+  "/redis/password"
+]

@@ -1,0 +1,3 @@
+#!/bin/sh
+set -eu
+redis-cli -a {{ getenv "REDIS_PASSWORD" "ChangeMePassword123456789" }} ping

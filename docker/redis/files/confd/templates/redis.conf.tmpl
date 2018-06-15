@@ -1,0 +1,7 @@
+maxmemory {{ getenv "REDIS_MAXMEM" "100mb" }}
+port {{ getenv "REDIS_PORT" "6379" }}
+timeout {{ getenv "REDIS_TIMEOUT" "0" }}
+requirepass {{ getenv "REDIS_PASSWORD" "ChangeMePassword123456789" }}
+dbfilename dump.rdb
+dir /data
+include /data/redis.conf
