@@ -13,6 +13,7 @@ location ~ ^/(status|ping)$ {
 error_page 500 502 503 504 @error;
 
 location @error {
+  internal;
   root /usr/share/nginx/html;
   try_files $uri /error.html /error.html;
 }
