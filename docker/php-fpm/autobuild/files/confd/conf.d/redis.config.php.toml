@@ -3,6 +3,6 @@ src = "redis.config.php.tmpl"
 dest = "/usr/src/nextcloud/config/redis.config.php"
 keys = [
   "/redis/hostname",
-  "/redis/port",
+  "/redis/password",
   "/redis/timeout"
 ]

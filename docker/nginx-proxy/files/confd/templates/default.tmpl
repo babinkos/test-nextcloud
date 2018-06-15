@@ -15,7 +15,7 @@ error_page 500 502 503 504 @error;
 location @error {
   internal;
   root /usr/share/nginx/html;
-  try_files $uri /error.html /error.html;
+  try_files $uri /50x.html /error.html;
 }
 
 #location /get_error {

@@ -3,7 +3,6 @@ src = "redis.conf.tmpl"
 dest = "/etc/redis/redis.conf"
 keys = [
   "/redis/maxmem",
-  "/redis/port",
   "/redis/timeout",
   "/redis/password"
 ]

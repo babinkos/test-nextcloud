@@ -1,6 +1,4 @@
 maxmemory {{ getenv "REDIS_MAXMEM" "100mb" }}
-#'port' => tcp://172.17.0.5:6379,
-port {{ if exists "/redis/port" }}{{ getenv "REDIS_PORT" }}{{ else }}6379{{ end }}
 timeout {{ getenv "REDIS_TIMEOUT" "0" }}
 requirepass {{ getenv "REDIS_PASSWORD" "ChangeMePassword123456789" }}
 dbfilename dump.rdb

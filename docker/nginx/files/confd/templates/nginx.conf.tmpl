@@ -159,6 +159,12 @@ http {
              fastcgi_param SCRIPT_FILENAME $request_filename;
              fastcgi_pass php-handler;
         }
+        error_page 500 502 503 504 @error;
+        location @error {
+          internal;
+          root /usr/share/nginx/html;
+          try_files $uri /50x.html /error.html;
+        }
     }
 
 }
