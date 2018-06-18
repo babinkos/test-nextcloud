@@ -1,9 +1,50 @@
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
+  ECSAMI:
+    Description: AMI ID
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: /aws/service/ecs/optimized-ami/amazon-linux/amzn-ami-2018.03.a-amazon-ecs-optimized
+  MyEC2InstanceType:
+    Type: "String"
+    Default: "t2.micro"
   MyVPCCidrBlock:
     Description: "CIDR Block for VPC (x.x.x.x/y)"
     Type: "String"
     Default: "172.31.0.0/16"
+  MyVPCPrivateCidrBlock:
+    Description: "CIDR Block for Private subnets (x.x.x.x/y)"
+    Type: "String"
+    Default: "172.31.0.0/17"
+  MyPrivateSubnetACidrBlock:
+    Description: "CIDR Block for Private subnet in AZ = a (x.x.x.x/y)"
+    Type: "String"
+    Default: "172.31.0.0/20"
+  MyPrivateSubnetBCidrBlock:
+    Description: "CIDR Block for Private subnet in AZ = b (x.x.x.x/y)"
+    Type: "String"
+    Default: "172.31.16.0/20"
+  MyPrivateSubnetCCidrBlock:
+    Description: "CIDR Block for Private subnet in AZ = c (x.x.x.x/y)"
+    Type: "String"
+    Default: "172.31.32.0/20"
+
+  MyVPCPublicCidrBlock:
+    Description: "CIDR Block for Public subnets (x.x.x.x/y)"
+    Type: "String"
+    Default: "172.31.128.0/17"
+  MyPublicSubnetACidrBlock:
+    Description: "CIDR Block for Public subnet in AZ = a (x.x.x.x/y)"
+    Type: "String"
+    Default: "172.31.128.0/20"
+  MyPublicSubnetBCidrBlock:
+    Description: "CIDR Block for Public subnet in AZ = b (x.x.x.x/y)"
+    Type: "String"
+    Default: "172.31.144.0/20"
+  MyPublicSubnetCCidrBlock:
+    Description: "CIDR Block for Public subnet in AZ = c (x.x.x.x/y)"
+    Type: "String"
+    Default: "172.31.160.0/20"
+
   DbSubnetIpBlocks:
     Description: "Comma-delimited list of three CIDR blocks"
     Type: CommaDelimitedList
@@ -21,7 +62,28 @@ Parameters:
     MinLength: 1
     MaxLength: 41
     AllowedPattern: ^[a-zA-Z0-9]*$
+  KeyName:
+    Description: "Name of an existing EC2 KeyPair to enable SSH access to the instance"
+    Type: "AWS::EC2::KeyPair::KeyName"
+    ConstraintDescription: "must be the name of an existing EC2 KeyPair."
+
 Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: "Network Configuration"
+        Parameters:
+          - VPCID
+          - SubnetId
+          - SecurityGroupID
+      -
+        Label:
+          default: "Amazon EC2 Configuration"
+        Parameters:
+          - InstanceType
+          - KeyName
+
   'AWS::CloudFormation::Designer':
     3d36b266-df42-45f6-9c60-aedbbe8649af:
       size:
