@@ -1,5 +1,15 @@
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
+  MyAZs:
+    Description: "Select 3 Availability Zones to place subnets for EFS/RDS/EC2"
+    Type: List<AWS::EC2::AvailabilityZone::Name>
+    Default: !Select
+      - 0
+      - Fn::GetAZs: !Ref 'AWS::Region'
+  MyECAZ:
+    Description: "Select one AZ where first free-tier EC2 for ECS will be placed"
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: !Select [ 0, !Ref MyAZs ]
   ECSAMI:
     Description: AMI ID
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
