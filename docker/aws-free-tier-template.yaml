@@ -1,3 +1,4 @@
+#https://sookocheff.com/post/aws/how-to-create-a-vpc-using-cloudformation/
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   MyAZs:
