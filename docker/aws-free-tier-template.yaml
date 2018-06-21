@@ -559,9 +559,11 @@ Metadata:
 Resources:
   EC2VPC3MP6S:
     Type: 'AWS::EC2::VPC'
-    Properties: {
-      CidrBlock: { "Ref" : "MyVPCCidrBlock" }
-      }
+    Properties:
+      CidrBlock: !Ref MyVPCCidrBlock
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
     Metadata:
       'AWS::CloudFormation::Designer':
         id: 3d36b266-df42-45f6-9c60-aedbbe8649af
@@ -569,6 +571,7 @@ Resources:
     Type: 'AWS::EC2::VPCCidrBlock'
     Properties:
       VpcId: !Ref EC2VPC3MP6S
+      CidrBlock: !Ref MyVPCCidrBlock
     Metadata:
       'AWS::CloudFormation::Designer':
         id: ad7ada6f-5501-4f2f-8041-852c7764ba7a
@@ -775,3 +778,8 @@ Resources:
     Metadata:
       'AWS::CloudFormation::Designer':
         id: a8c0f78e-5145-4eaf-8ee3-77b5f4d63396
+Outputs:
+  VpcId:
+    Value: !Ref VPC
+  PrimaryCidrBlock:
+    Value: !GetAtt VPC.CidrBlock
