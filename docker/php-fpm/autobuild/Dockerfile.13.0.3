@@ -133,8 +133,8 @@ RUN \
     rm -rf /usr/src/nextcloud/updater; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
-    find /usr/src/nextcloud/ -type d -exec chmod 750 {} \;; \
-    find /usr/src/nextcloud/ -type f -exec chmod 640 {} \;; \
+    find /usr/src/nextcloud/ -type d -exec chmod 750 {} \\;; \
+    find /usr/src/nextcloud/ -type f -exec chmod 640 {} \\;; \
     chmod +x /usr/src/nextcloud/occ;\
     apk del .fetch-deps; \
     rm -rf /var/cache/apk/*;ls /usr/src/;ls /usr/src/nextcloud/
