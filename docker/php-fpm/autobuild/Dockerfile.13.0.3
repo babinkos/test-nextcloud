@@ -5,7 +5,7 @@ COPY *.sh /
 COPY nextcloud.asc /tmp/nextcloud.asc
 #COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /*.apk /
 #COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /var/cache/ /var/cache/
-ENV NEXTCLOUD_VERSION 13.0.2
+ENV NEXTCLOUD_VERSION 13.0.3
 #ADD https://github.com/babinkos/docker-gen/releases/download/0.7.6/confd.gz /usr/local/bin/confd.gz
 COPY --from=docker.io/k0s2018/test-nextcloud:docker-gen.builder /artifacts/confd /usr/local/bin/
 COPY files/confd /etc/confd/
@@ -104,7 +104,14 @@ RUN set -ex; \
     mkdir /var/www/data; \
     chown -R www-data:root /var/www; \
     chmod -R g=u /var/www; \
-#    set -ex; \
+    { \
+      echo 'ping.path = /ping'; \
+      echo 'ping.response = pong'; \
+      echo 'access.log = /dev/null'; \
+      } >> /usr/local/etc/php-fpm.conf; \
+    echo 'pm.status_path = /status' >> /usr/local/etc/php-fpm.d/www.conf
+RUN
+    set -ex; \
     apk add --virtual .fetch-deps \
 #        bzip2 \
         gnupg \
@@ -126,16 +133,11 @@ RUN set -ex; \
     rm -rf /usr/src/nextcloud/updater; \
     mkdir -p /usr/src/nextcloud/data; \
     mkdir -p /usr/src/nextcloud/custom_apps; \
+    find /usr/src/nextcloud/ -type d -exec chmod 750 {} \;; \
+    find /usr/src/nextcloud/ -type f -exec chmod 640 {} \;; \
     chmod +x /usr/src/nextcloud/occ;\
     apk del .fetch-deps; \
-    rm -rf /var/cache/apk/*;ls /usr/src/;ls /usr/src/nextcloud/; \
-    { \
-      echo 'ping.path = /ping'; \
-      echo 'ping.response = pong'; \
-      echo 'access.log = /dev/null'; \
-      } >> /usr/local/etc/php-fpm.conf; \
-    echo 'pm.status_path = /status' >> /usr/local/etc/php-fpm.d/www.conf
-# to get fpm status use command ping or status like this: SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000
+    rm -rf /var/cache/apk/*;ls /usr/src/;ls /usr/src/nextcloud/
 COPY config/* /usr/src/nextcloud/config/
 RUN \
   chown -R www-data:root /usr/src/nextcloud/ ; \
