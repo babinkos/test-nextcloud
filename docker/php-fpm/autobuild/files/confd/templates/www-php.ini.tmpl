@@ -1,4 +1,4 @@
-{{ if exists "/overwrite/host" }}
+{{ if exists "/php/memory/limit" }}
 memory_limit = {{ getenv "PHP_MEMORY_LIMIT" "512M"}}
 {{ end }}
 {{ if exists "/php/max/filesize" }}
