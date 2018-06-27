@@ -1,0 +1,7 @@
+[template]
+src = "www-php.ini.tmpl"
+dest = "/usr/local/etc/php/conf.d/www-php.ini"
+keys = [
+    "/php/memory/limit",
+    "/php/max/filesize"
+]

@@ -1,0 +1,12 @@
+{{ if exists "/overwrite/host" }}
+memory_limit = {{ getenv "PHP_MEMORY_LIMIT" "512M"}}
+{{ end }}
+{{ if exists "/php/max/filesize" }}
+upload_max_filesize = {{ getenv "PHP_MAX_FILESIZE" "16G"}}
+post_max_size = {{ getenv "PHP_MAX_FILESIZE" "16G"}}
+{{ end }}
+expose_php = off
+output_buffering = 0
+mbstring.func_overload = 0
+always_populate_raw_post_data = -1
+default_charset = "UTF-8"
