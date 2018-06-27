@@ -101,6 +101,13 @@ RUN set -ex; \
         echo 'opcache.revalidate_freq=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini; \
     \
+    { \
+      echo 'expose_php = off'; \
+      echo 'upload_max_filesize = 16G'; \
+      echo 'post_max_size = 16G'; \
+      echo 'output_buffering = 0'; \
+    } > /usr/local/etc/php/conf.d/www.ini; \
+\
     mkdir /var/www/data; \
     chown -R www-data:root /var/www; \
     chmod -R g=u /var/www; \

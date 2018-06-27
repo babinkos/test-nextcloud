@@ -1,3 +1,8 @@
+#nginx ssl proxy configuration parameters (extending config generated with docker-gen)
+server_tokens off;
+proxy_buffering off;
+client_max_body_size 16G;
+
 location ~ \.(?:css|js|woff|svg|gif|png|html|ttf|ico|jpg|jpeg)$ {
   access_log off;
   proxy_pass http://{{ getenv "PUBLIC_FQDN" }};
