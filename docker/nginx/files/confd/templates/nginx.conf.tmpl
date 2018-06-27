@@ -88,6 +88,10 @@ http {
         # This module is currently not supported.
         #pagespeed off;
 
+        location /get_error {
+            return 500;
+        }
+
         location / {
             rewrite ^ /index.php$uri;
         }
@@ -161,6 +165,7 @@ http {
         }
         error_page 500 502 503 504 @error;
         location @error {
+          add_header Retry-After 120 always;
           internal;
           root /usr/share/nginx/html;
           try_files $uri /50x.html /error.html;
