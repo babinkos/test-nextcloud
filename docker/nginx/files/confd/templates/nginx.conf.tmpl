@@ -24,7 +24,7 @@ http {
     sendfile        on;
     #tcp_nopush     on;
     fastcgi_request_buffering off;
-    client_max_body_size {{ getenv "MAX_UPLOAD_SIZE" "16GB" }};
+    client_max_body_size {{ getenv "MAX_UPLOAD_SIZE" "16G" }};
 
     keepalive_timeout  65;
 
@@ -76,8 +76,8 @@ http {
         }
 
         # set max upload size
-        client_max_body_size 10G;
-        fastcgi_buffers 64 4K;
+#        client_max_body_size 10G;
+#        fastcgi_buffers 64 4K;
 
         # Enable gzip but do not remove ETag headers
         gzip on;
