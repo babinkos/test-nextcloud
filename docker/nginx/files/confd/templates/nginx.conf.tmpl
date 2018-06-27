@@ -24,7 +24,7 @@ http {
     sendfile        on;
     #tcp_nopush     on;
     fastcgi_request_buffering off;
-    client_max_body_size 16G;
+    client_max_body_size {{ getenv "MAX_UPLOAD_SIZE" "16GB" }};
 
     keepalive_timeout  65;
 
