@@ -2,16 +2,18 @@
 ARG PHP_VER=7.2
 ARG ALPINE_VER=3.7
 ARG NEXTCLOUD_VERSION=13.0.2
-ENV NCVER_SED="$(13\.0\.2)"
+FROM php:${PHP_VER}-fpm-alpine${ALPINE_VER}
+ARG PHP_VER
+ARG ALPINE_VER
+ARG NEXTCLOUD_VERSION
 ENV NC_URL="https://download.nextcloud.com/server/releases/nextcloud"
-FROM php:$PHP_VER-fpm-alpine$ALPINE_VER
 COPY *.sh /
 COPY nextcloud.asc /tmp/nextcloud.asc
 COPY --from=docker.io/k0s2018/test-nextcloud:docker-gen.builder /artifacts/confd /usr/local/bin/
 COPY files/confd /etc/confd/
+COPY config/* /tmp/config/
 VOLUME /var/www/html
 RUN set -ex; \
-    gzip -d /usr/local/bin/confd.gz; \
     chmod +x /*.sh; \
     chmod +x /usr/local/bin/confd; \
     sync; \
@@ -116,7 +118,7 @@ RUN \
     curl -fsSL -o nextcloud.tar.bz2.sha256 "${NC_URL}-${NEXTCLOUD_VERSION}.tar.bz2.sha256"; \
     ls -l; gpg --import /tmp/nextcloud.asc;\
     gpg --verify nextcloud.tar.bz2.asc && \
-    sed -i "s/$NEXTCLOUD_VERSION//g" nextcloud.tar.bz2.sha256; \
+    echo "s/-$NEXTCLOUD_VERSION//g"; sed -i "s/-$NEXTCLOUD_VERSION//g" nextcloud.tar.bz2.sha256; \
     sha256sum -c nextcloud.tar.bz2.sha256 && \
     echo "source archieve nextcloud-$NEXTCLOUD_VERSION.tar.bz2 SHA256 and GPG are Good!";\
     tar -xjf nextcloud.tar.bz2 -C /usr/src/;\
@@ -134,7 +136,7 @@ RUN \
     ls /usr/src/nextcloud/ ; \
     cp /tmp/config/* /usr/src/nextcloud/config/ ; \
   chown -R www-data:root /usr/src/nextcloud/ ; \
-  php -i ; \
+  php -m ; \
   rm "/usr/src/nextcloud/config/config.sample.php" ; \
   /test-fcgi.sh; \
   echo "Nextcloud version from version.php $(php -r 'require "/usr/src/nextcloud/version.php"; echo implode(".", $OC_Version);') is packaged into image."
