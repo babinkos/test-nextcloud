@@ -1,31 +1,26 @@
 # based on nextcloud:fpm-alpine sources
-#FROM  as builder
-FROM php:7.2-fpm-alpine3.7
+ARG PHP_VER=7.2
+ARG ALPINE_VER=3.7
+ARG NEXTCLOUD_VERSION=13.0.2
+ENV NCVER_SED="$(13\.0\.2)"
+ENV NC_URL="https://download.nextcloud.com/server/releases/nextcloud"
+FROM php:$PHP_VER-fpm-alpine$ALPINE_VER
 COPY *.sh /
 COPY nextcloud.asc /tmp/nextcloud.asc
-#COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /*.apk /
-#COPY --from=docker.io/k0s2018/test-nextcloud:apkcache /var/cache/ /var/cache/
-ENV NEXTCLOUD_VERSION 13.0.2
-#ADD https://github.com/babinkos/docker-gen/releases/download/0.7.6/confd.gz /usr/local/bin/confd.gz
 COPY --from=docker.io/k0s2018/test-nextcloud:docker-gen.builder /artifacts/confd /usr/local/bin/
 COPY files/confd /etc/confd/
 VOLUME /var/www/html
-#ADD "nextcloud-${NEXTCLOUD_VERSION}.tar.bz2" /usr/src/
-# entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
-#    gzip -d /usr/local/bin/confd.gz; \
+    gzip -d /usr/local/bin/confd.gz; \
     chmod +x /*.sh; \
     chmod +x /usr/local/bin/confd; \
     sync; \
     /usr/local/bin/confd -version; \
-#    if [ ! -f /tmp/nextcloud.asc ]; then echo '/tmp/nexctloud.asc not found';curl -fsSL -o /tmp/nextcloud.asc 'https://github.com/babinkos/test-nextcloud/raw/dev/docker/php-fpm/autobuild/nextcloud.asc';else echo 'nexctloud.asc copied from build context directory'; fi;\
-#    echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories;\
     apk -q add -U \
         bzip2 \
         fcgi \
         rsync \
         zip; \
-#    echo "$(ls -l /*.apk | wc -l) apk packages were copied from previous build stage image"; \
     rm /var/spool/cron/crontabs/root; \
     echo '*/15 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data;\
 # install the PHP extensions we need (+adding bz2, gmp, imagick, imap with bzip2-dev gmp-dev imagemagick-dev imap-dev krb5-dev )
@@ -113,18 +108,15 @@ RUN set -ex; \
 RUN \
     set -ex; \
     apk add --virtual .fetch-deps \
-#        bzip2 \
-        gnupg \
-    ; echo "nextcloud version=${NEXTCLOUD_VERSION}"; ls -l; \
-    curl -fsSL -o nextcloud.tar.bz2 \
-        "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2"; \
-    curl -fsSL -o nextcloud.tar.bz2.asc \
-        "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2.asc"; \
-    curl -fsSL -o nextcloud.tar.bz2.sha256 \
-        "https://download.nextcloud.com/server/releases/nextcloud-${NEXTCLOUD_VERSION}.tar.bz2.sha256"; \
+        gnupg; \
+    echo "nextcloud version=${NEXTCLOUD_VERSION}"; \
+    ls -l; \
+    curl -fsSL -o nextcloud.tar.bz2 "${NC_URL}-${NEXTCLOUD_VERSION}.tar.bz2"; \
+    curl -fsSL -o nextcloud.tar.bz2.asc "${NC_URL}-${NEXTCLOUD_VERSION}.tar.bz2.asc"; \
+    curl -fsSL -o nextcloud.tar.bz2.sha256 "${NC_URL}-${NEXTCLOUD_VERSION}.tar.bz2.sha256"; \
     ls -l; gpg --import /tmp/nextcloud.asc;\
     gpg --verify nextcloud.tar.bz2.asc && \
-    sed -i 's/\-13\.0\.2//g' nextcloud.tar.bz2.sha256; \
+    sed -i "s/$NEXTCLOUD_VERSION//g" nextcloud.tar.bz2.sha256; \
     sha256sum -c nextcloud.tar.bz2.sha256 && \
     echo "source archieve nextcloud-$NEXTCLOUD_VERSION.tar.bz2 SHA256 and GPG are Good!";\
     tar -xjf nextcloud.tar.bz2 -C /usr/src/;\
@@ -136,15 +128,16 @@ RUN \
     find /usr/src/nextcloud/ -type d -exec chmod 750 {} \; ; \
     find /usr/src/nextcloud/ -type f -exec chmod 640 {} \; ; \
     chmod +x /usr/src/nextcloud/occ;\
-    apk del .fetch-deps; \
-    rm -rf /var/cache/apk/*;ls /usr/src/;ls /usr/src/nextcloud/
-COPY config/* /usr/src/nextcloud/config/
-RUN \
+    apk del .fetch-deps ; \
+    rm -rf /var/cache/apk/* ; \
+    ls /usr/src/ ; \
+    ls /usr/src/nextcloud/ ; \
+    cp /tmp/config/* /usr/src/nextcloud/config/ ; \
   chown -R www-data:root /usr/src/nextcloud/ ; \
   php -i ; \
-  rm "/usr/src/nextcloud/.user.ini" ; \
+  rm "/usr/src/nextcloud/config/config.sample.php" ; \
   /test-fcgi.sh; \
-  echo "Nextcloud version $(php -r 'require "/usr/src/nextcloud/version.php"; echo implode(".", $OC_Version);') is packaged into image."
+  echo "Nextcloud version from version.php $(php -r 'require "/usr/src/nextcloud/version.php"; echo implode(".", $OC_Version);') is packaged into image."
 HEALTHCHECK --interval=10s --timeout=3s --start-period=30s \
         CMD \
         /ping.sh || exit 1
