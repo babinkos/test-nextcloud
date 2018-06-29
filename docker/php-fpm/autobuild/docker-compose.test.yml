@@ -1,0 +1,8 @@
+sut:
+  build: .
+  dockerfile: Dockerfile
+  args:
+    - PHP_VER: "7.2"
+    - ALPINE_VER: "3.7"
+    - NEXTCLOUD_VERSION: "13.0.2"
+  command: /test-fcgi.sh
