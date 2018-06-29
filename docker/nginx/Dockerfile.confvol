@@ -1,4 +1,6 @@
-FROM alpine:3.7
+ARG ALPINE_VER=3.7
+FROM alpine:${ALPINE_VER}
+ARG ALPINE_VER
 VOLUME ["/usr/local/etc/nginx"]
 COPY --from=docker.io/k0s2018/test-nextcloud:docker-gen.builder /artifacts/confd /usr/local/bin/
 COPY files/confd /etc/confd/
