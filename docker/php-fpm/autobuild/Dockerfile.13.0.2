@@ -102,20 +102,12 @@ RUN set -ex; \
     chown -R www-data:root /var/www; \
     chmod -R g=u /var/www; \
     { \
-      echo '[www]'; \
-      echo 'user = www-data'; \
-      echo 'group = www-data'; \
-      echo 'listen = 127.0.0.1:9000'; \
-      echo 'pm = dynamic'; \
-      echo 'pm.max_children = 10'; \
-      echo 'pm.start_servers = 2'; \
-      echo 'pm.min_spare_servers = 1'; \
-      echo 'pm.max_spare_servers = 3'; \
       echo 'ping.path = /ping'; \
       echo 'ping.response = pong'; \
       echo 'access.log = /dev/null'; \
-      } > /usr/local/etc/php-fpm.conf; \
-    echo 'pm.status_path = /status' > /usr/local/etc/php-fpm.d/www.conf
+      } >> /usr/local/etc/php-fpm.conf ; \
+      echo 'pm.max_children = 10' >> /usr/local/etc/php-fpm.d/www.conf.default ; \
+    echo 'pm.status_path = /status' >> /usr/local/etc/php-fpm.d/www.conf
 RUN \
     set -ex; \
     apk add --virtual .fetch-deps \
