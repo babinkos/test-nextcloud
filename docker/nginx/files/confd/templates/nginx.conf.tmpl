@@ -78,8 +78,6 @@ http {
             return 301 $scheme://$host/remote.php/dav;
         }
 
-        # set max upload size
-#        client_max_body_size 10G;
         fastcgi_buffers 64 4K;
 
         # Enable gzip but do not remove ETag headers
@@ -109,7 +107,7 @@ http {
             deny all;
         }
 
-        location ~ ^/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|ocs-provider/.+)\.php(?:$|/) {
+        location ~ ^/(?:index|phpinfo|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|ocs-provider/.+)\.php(?:$|/) {
             fastcgi_split_path_info ^(.+\.php)(/.*)$;
             include fastcgi_params;
             fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
