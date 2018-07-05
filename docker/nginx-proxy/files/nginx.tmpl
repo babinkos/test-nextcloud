@@ -64,7 +64,7 @@ log_format vhost '$host $remote_addr - $remote_user [$time_local] '
                  '"$http_referer" "$http_user_agent"';
 
 access_log off;
-
+limit_conn_zone $binary_remote_addr zone=addr:10m;
 {{ if $.Env.RESOLVERS }}
 resolver {{ $.Env.RESOLVERS }};
 {{ end }}
@@ -297,9 +297,10 @@ server {
 }
 
 server {
+# stub block for scan attemts using IP instead of normal URL with dns name
 	include /tmp/servername-hostip;
 	listen 443 ssl http2;
-	access_log /var/log/nginx/access-stub.log vhost;
+	access_log /var/log/nginx/access.log vhost;
 
 	{{ if eq $ssl_policy "Mozilla-Modern" }}
 	ssl_protocols TLSv1.2 TLSv1.3;
@@ -329,17 +330,24 @@ server {
 	ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
 	ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:AES128-GCM-SHA256:AES128-SHA256:AES128-SHA:AES256-GCM-SHA384:AES256-SHA256:AES256-SHA:DHE-DSS-AES128-SHA';
 	{{ end }}
-
+	server_tokens off;
 	ssl_prefer_server_ciphers on;
 	ssl_session_timeout 5m;
 	ssl_session_cache shared:SSL:50m;
 	ssl_session_tickets off;
 	ssl_certificate /etc/nginx/certs/stub.crt;
 	ssl_certificate_key /etc/nginx/certs/stub.key;
-	limit_conn_zone $binary_remote_addr zone=addr:10m;
+	error_page 500 502 503 504 @error;
+	location @error {
+	  add_header Retry-After 31536000 always;
+	  internal;
+	  root /usr/share/nginx/html;
+	  try_files $uri /error.html /50x.html;
+	}
 	location / {
-		limit_rate 1;
+		limit_rate 16;
 		limit_conn addr 1;
+		limit_conn_status 503;
 		return 500;
 	}
 }

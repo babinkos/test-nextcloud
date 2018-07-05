@@ -27,7 +27,7 @@ location @error {
   add_header Retry-After 120 always;
   internal;
   root /usr/share/nginx/html;
-  try_files $uri /50x.html /error.html;
+  try_files $uri /error.html /50x.html;
 }
 
 location /get_error {
