@@ -2,6 +2,7 @@
 FROM jwilder/nginx-proxy:alpine
 LABEL maintainer="babinkos 37809416+babinkos@users.noreply.github.com"
 COPY *.sh /
+COPY files/nginx.tmpl /app/
 COPY files/confd /etc/confd/
 COPY files/error.html /usr/share/nginx/html/
 ENV DOCKER_GEN_FORK "github.com/babinkos/docker-gen"
