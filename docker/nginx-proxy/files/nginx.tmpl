@@ -357,11 +357,8 @@ server {
 {{ end }}
 
 
-{{ if (and (exists "/etc/nginx/certs/stub.crt") (exists "/etc/nginx/certs/stub.key")) }}
 server {
-	{{ if (exists "/tmp/servername-hostip") }}
 	include /tmp/servername-hostip;
-	{{ end }}
 
 	listen 443 ssl http2;
 	access_log /var/log/nginx/access-stub.log vhost;
@@ -411,7 +408,6 @@ server {
 		return 500;
 	}
 }
-{{ end }}
 
 {{ end }}
 {{ end }}

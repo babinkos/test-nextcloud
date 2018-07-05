@@ -1,6 +1,0 @@
-[template]
-src = "servername-hostip.tmpl"
-dest = "/tmp/servername-hostip"
-keys = [
-    "/public/fqdn"
-]
