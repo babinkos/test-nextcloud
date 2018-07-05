@@ -1,1 +1,1 @@
-servername {{ range lookupIP getenv "PUBLIC_FQDN" }}{{.}} {{end}};
+servername {{ range lookupIP (getenv "PUBLIC_FQDN") }}{{.}} {{end}};
