@@ -337,7 +337,7 @@ server {
 	ssl_session_tickets off;
 	ssl_certificate /etc/nginx/certs/stub.crt;
 	ssl_certificate_key /etc/nginx/certs/stub.key;
-	error_page 500 502 503 504 @error;
+	error_page 418 429 500 502 503 504 @error;
 	location @error {
 	  add_header Retry-After 31536000 always;
 	  internal;
@@ -345,10 +345,10 @@ server {
 	  try_files $uri /error.html /50x.html;
 	}
 	location / {
-		limit_rate 16;
+		limit_rate 8;
 		limit_conn addr 1;
-		limit_conn_status 503;
-		return 500;
+		limit_conn_status 429;
+		return 418;
 	}
 }
 
