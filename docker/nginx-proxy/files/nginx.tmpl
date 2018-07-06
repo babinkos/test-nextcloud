@@ -90,7 +90,7 @@ proxy_set_header Proxy "";
 
 {{ $enable_ipv6 := eq (or ($.Env.ENABLE_IPV6) "") "true" }}
 server {
-	listen 127.0.0.1:80 bind;
+	listen 127.0.0.1:88;
 	server_name 127.0.0.1;
 	location ~ ^/ping$ {
   	access_log off;
