@@ -39,9 +39,9 @@ if version_greater "$image_version" "$installed_version"; then
         run_as 'php /var/www/html/occ app:list' | sed -n "/Enabled:/,/Disabled:/p" > /tmp/list_before
     fi
     if [ "$(id -u)" = 0 ]; then
-      rsync_options="-vcrlDog --chown www-data:root"
+      rsync_options="-qcrlDog --chown www-data:root --log-file=/var/log/rsync.log"
     else
-      rsync_options="-vcrlD"
+      rsync_options="-qcrlD --log-file=/var/log/rsync.log"
     fi
     time rsync $rsync_options --delete --exclude /config/ --exclude /data/ --exclude /custom_apps/ --exclude /themes/ /usr/src/nextcloud/ /var/www/html/
 
