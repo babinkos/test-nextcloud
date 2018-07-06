@@ -13,15 +13,12 @@ location ~ \.(?:css|js|woff|svg|gif|png|html|ttf|ico|jpg|jpeg)$ {
   access_log off;
   proxy_pass http://{{ getenv "PUBLIC_FQDN" }};
 }
-location ~ ^/ping$ {
-  access_log off;
-  allow 127.0.0.1;
-  #Default Docker subnet
-  allow 172.17.0.0/16;
-  deny all;
-  proxy_pass http://{{ getenv "PUBLIC_FQDN" }};
-}
-location ~ ^/status$ {
+#location ~ ^/ping$ {
+#  access_log off;
+#	add_header Content-Type text/plain;
+#	return 200 'pong';
+#}
+location ~ ^/(status|ping|phpinfo.php)$ {
   limit_rate 8;
   limit_conn addr 1;
   limit_conn_status 429;

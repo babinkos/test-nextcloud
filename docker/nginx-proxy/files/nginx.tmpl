@@ -90,6 +90,17 @@ proxy_set_header Proxy "";
 
 {{ $enable_ipv6 := eq (or ($.Env.ENABLE_IPV6) "") "true" }}
 server {
+	listen 127.0.0.1:80 bind;
+	server_name 127.0.0.1;
+	location ~ ^/ping$ {
+  	access_log off;
+#		add_header Content-Type text/plain;
+#		return 200 'pong';
+		return 204;
+	}
+}
+
+server {
 #	server_name _; # This is just an invalid value which will never trigger on a real hostname.
 # stub block for scan attemts using IP instead of normal URL with dns name
 	include /tmp/servername-hostip;
@@ -106,6 +117,12 @@ server {
 	  root /usr/share/nginx/html;
 	  try_files $uri /error.html /50x.html;
 	}
+#	location ~ ^/ping$ {
+#	  access_log off;
+#		add_header Content-Type text/plain;
+#		return 200 'pong';
+#		return 204;
+#	}
 	location / {
 		limit_rate 8;
 		limit_conn addr 1;
@@ -359,6 +376,11 @@ server {
 	  root /usr/share/nginx/html;
 	  try_files $uri /error.html /50x.html;
 	}
+#	location ~ ^/ping$ {
+#	  access_log off;
+#		add_header Content-Type text/plain;
+#		return 200 'pong';
+#	}
 	location / {
 		limit_rate 8;
 		limit_conn addr 1;
