@@ -5,4 +5,6 @@ $CONFIG = array ({{ if exists "/redis/hostname" }}
   'timeout' => {{ getenv "REDIS_TIMEOUT" "0.0" }},
   'password' => '{{ getenv "REDIS_PASSWORD" "ChangeMePassword123456789" }}',
       ),
+'filelocking.enabled' => true,
+'memcache.locking' => '\OC\Memcache\Redis',      
 {{ end }});

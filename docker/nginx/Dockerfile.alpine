@@ -1,11 +1,11 @@
 FROM nginx:alpine
 VOLUME ["/usr/local/etc/nginx"]
 COPY www-2-nginx.sh test-http.sh /
-#COPY test-http.sh /test-http.sh
 RUN \
-# echo "http://alpine.gliderlabs.com/alpine/v$(cut -d'.' -f1,2 /etc/alpine-release)/main" > /etc/apk/repositories; \
-  apk add -U curl --no-cache; \
-# rm -rf /var/cache/apk
+  apk add -U curl shadow --no-cache; \
+# to workaround permission for /var/www/html which is set to www-data:root as 640/750 (www-data uid is 82 in nextcloud dockerfile) ; \
+  usermod -u 82 nginx; \
+  apk del shadow; \
   chmod +x /www-2-nginx.sh; \
   chmod +x /test-http.sh
 ENTRYPOINT ["/www-2-nginx.sh"]

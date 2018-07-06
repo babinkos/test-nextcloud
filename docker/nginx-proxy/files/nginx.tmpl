@@ -124,7 +124,7 @@ server {
 #		return 204;
 #	}
 	#add_header Allow "GET, POST, HEAD" always;
-	if ( $request_method !~ ^(GET|POST|HEAD)$ ) {
+	if ( $request_method !~ ^GET$ ) {
    	return 418;
 	}
 	location / {
@@ -385,6 +385,10 @@ server {
 #		add_header Content-Type text/plain;
 #		return 200 'pong';
 #	}
+#add_header Allow "GET, POST, HEAD" always;
+	if ( $request_method !~ ^GET$ ) {
+		return 418;
+	}
 	location / {
 		limit_rate 8;
 		limit_conn addr 1;
