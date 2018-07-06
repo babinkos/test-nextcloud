@@ -123,6 +123,10 @@ server {
 #		return 200 'pong';
 #		return 204;
 #	}
+	#add_header Allow "GET, POST, HEAD" always;
+	if ( $request_method !~ ^(GET|POST|HEAD)$ ) {
+   	return 418;
+	}
 	location / {
 		limit_rate 8;
 		limit_conn addr 1;
