@@ -1,13 +1,15 @@
-sut:
-  build:
-    context: .
-    dockerfile: Dockerfile
-    args:
-      - PHP_VER: "7.2"
-      - ALPINE_VER: "3.7"
-      - NEXTCLOUD_VERSION: "13.0.2"
-  environment:
-    - SQLITE_DATABASE="testdb"
-    - NEXTCLOUD_ADMIN_USER="admin"
-    - NEXTCLOUD_ADMIN_PASSWORD="testpass"
-  command: /test-nc-status.sh
+version: '3'
+services:
+  sut:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - PHP_VER: "7.2"
+        - ALPINE_VER: "3.7"
+        - NEXTCLOUD_VERSION: "13.0.2"
+    environment:
+      - SQLITE_DATABASE="testdb"
+      - NEXTCLOUD_ADMIN_USER="admin"
+      - NEXTCLOUD_ADMIN_PASSWORD="testpass"
+    command: /test-nc-status.sh
