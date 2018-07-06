@@ -34,5 +34,8 @@ location @error {
 }
 
 location /get_error {
-    return 500;
+  limit_rate 8;
+  limit_conn addr 1;
+  limit_conn_status 429;
+  return 500;
 }
