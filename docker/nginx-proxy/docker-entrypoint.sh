@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-echo "server_name $(curl http://169.254.169.254/latest/meta-data/public-ipv4);" > /tmp/servername-hostip
+echo "server_name localhost _ 127.0.0.1 $(curl http://169.254.169.254/latest/meta-data/public-ipv4);" > /tmp/servername-hostip
 /usr/local/bin/confd -onetime -backend env
 # Warn if the DOCKER_HOST socket does not exist
 if [[ $DOCKER_HOST = unix://* ]]; then
