@@ -22,6 +22,7 @@ RUN set -ex; \
         bzip2 \
         fcgi \
         rsync \
+        sudo \
         zip; \
     rm /var/spool/cron/crontabs/root; \
     echo '*/15 * * * * php -f /var/www/html/cron.php' > /var/spool/cron/crontabs/www-data;\
