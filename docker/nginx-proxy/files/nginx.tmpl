@@ -61,7 +61,7 @@ gzip_types text/plain text/css application/javascript application/json applicati
 
 log_format vhost '$host $remote_addr - $remote_user [$time_local] '
                  '$connection $connection_requests $request_length "$request" $status $body_bytes_sent $request_time'
-                 '"$http_referer" "$http_user_agent" $server_port $http2';
+                 ' "$http_referer" "$http_user_agent" $server_port $http2';
 
 access_log off;
 limit_conn_zone $binary_remote_addr zone=addr:10m;
@@ -110,7 +110,7 @@ server {
 	{{ end }}
 	access_log /var/log/nginx/access.log vhost;
 	server_tokens off;
-	error_page 418 429 500 502 503 504 @error;
+	error_page 400 405 418 429 497 500 502 503 504 @error;
 	location @error {
 	  add_header Retry-After 31536000 always;
 	  internal;
@@ -373,7 +373,11 @@ server {
 	ssl_session_tickets off;
 	ssl_certificate /etc/nginx/certs/stub.crt;
 	ssl_certificate_key /etc/nginx/certs/stub.key;
-	error_page 418 429 500 502 503 504 @error;
+
+	# If they come here using HTTP, bounce them to the correct scheme
+	#error_page 497 https://$host:$server_port$request_uri;
+
+	error_page 400 405 418 429 497 500 502 503 504 @error;
 	location @error {
 	  add_header Retry-After 31536000 always;
 	  internal;
