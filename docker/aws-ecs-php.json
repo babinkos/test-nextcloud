@@ -4,8 +4,11 @@
     {
       "dnsSearchDomains": null,
       "logConfiguration": {
-        "logDriver": "json-file",
-        "options": null
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "ecs-nc-app",
+          "awslogs-region": "eu-central-1"
+        }
       },
       "entryPoint": [],
       "portMappings": [],
@@ -15,23 +18,23 @@
       "environment": [
         {
           "name": "NEXTCLOUD_ADMIN_PASSWORD",
-          "value": ""
+          "value": "YtrcnRkfel2018"
         },
         {
           "name": "NEXTCLOUD_ADMIN_USER",
-          "value": ""
+          "value": "mynctoor18"
         },
         {
           "name": "OVERWRITE_HOST",
-          "value": ""
+          "value": "ec2-35-158-130-161.eu-central-1.compute.amazonaws.com"
         },
         {
           "name": "PGPASSWORD",
-          "value": ""
+          "value": "MyPostGreRoot2018"
         },
         {
           "name": "PGUSER",
-          "value": ""
+          "value": "pgroot96"
         },
         {
           "name": "PHP_MAX_FILESIZE",
@@ -43,19 +46,19 @@
         },
         {
           "name": "POSTGRES_DB",
-          "value": ""
+          "value": "ncdb_13_02"
         },
         {
           "name": "POSTGRES_HOST",
-          "value": ""
+          "value": "mypg96.cfe3ga36mfaf.eu-central-1.rds.amazonaws.com"
         },
         {
           "name": "POSTGRES_PASSWORD",
-          "value": ""
+          "value": "MyNCpostgreRoot2018"
         },
         {
           "name": "POSTGRES_USER",
-          "value": ""
+          "value": "ncdbadmin"
         },
         {
           "name": "REDIS_HOSTNAME",
@@ -106,8 +109,11 @@
     {
       "dnsSearchDomains": null,
       "logConfiguration": {
-        "logDriver": "json-file",
-        "options": null
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "ecs-nc-nginx",
+          "awslogs-region": "eu-central-1"
+        }
       },
       "entryPoint": null,
       "portMappings": [],
@@ -117,11 +123,11 @@
       "environment": [
         {
           "name": "MAX_UPLOAD_SIZE",
-          "value": "16GB"
+          "value": "16G"
         },
         {
           "name": "VIRTUAL_HOST",
-          "value": ""
+          "value": "ec2-35-158-130-161.eu-central-1.compute.amazonaws.com"
         }
       ],
       "ulimits": null,
@@ -180,6 +186,10 @@
       "cpu": 0,
       "environment": [
         {
+          "name": "MAX_UPLOAD_SIZE",
+          "value": "16G"
+        },
+        {
           "name": "PHP_UPSTREAM_HOST",
           "value": "app"
         }
@@ -233,23 +243,23 @@
       "environment": [
         {
           "name": "CA_SUBJECT",
-          "value": "noreply@a.b"
+          "value": "noreply@tth.cl"
         },
         {
           "name": "SSL_CERT",
-          "value": "/certs/.crt"
+          "value": "/certs/ec2-35-158-130-161.eu-central-1.compute.amazonaws.com.crt"
         },
         {
           "name": "SSL_CSR",
-          "value": "/certs/.csr"
+          "value": "/certs/ec2-35-158-130-161.eu-central-1.compute.amazonaws.com.csr"
         },
         {
           "name": "SSL_KEY",
-          "value": "/certs/.key"
+          "value": "/certs/ec2-35-158-130-161.eu-central-1.compute.amazonaws.com.key"
         },
         {
           "name": "SSL_SUBJECT",
-          "value": ""
+          "value": "ec2-35-158-130-161.eu-central-1.compute.amazonaws.com"
         }
       ],
       "ulimits": null,
@@ -290,8 +300,11 @@
     {
       "dnsSearchDomains": null,
       "logConfiguration": {
-        "logDriver": "json-file",
-        "options": null
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "ecs-nc-proxy",
+          "awslogs-region": "eu-central-1"
+        }
       },
       "entryPoint": null,
       "portMappings": [
@@ -312,11 +325,11 @@
       "environment": [
         {
           "name": "MAX_UPLOAD_SIZE",
-          "value": "16GB"
+          "value": "16G"
         },
         {
           "name": "PUBLIC_FQDN",
-          "value": ""
+          "value": "ec2-35-158-130-161.eu-central-1.compute.amazonaws.com"
         }
       ],
       "ulimits": null,
@@ -424,13 +437,19 @@
   ],
   "placementConstraints": [],
   "memory": "900",
-  "taskRoleArn": null,
+  "taskRoleArn": "arn:aws:iam::343089639354:role/test-ecs-task-role",
   "compatibilities": [
     "EC2"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:343089639354:task-definition/php-fpm-nextcloud-13-0-2:35",
+  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:343089639354:task-definition/php-fpm-nextcloud-13-0-2:38",
   "family": "php-fpm-nextcloud-13-0-2",
   "requiresAttributes": [
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+    },
     {
       "targetId": null,
       "targetType": null,
@@ -441,7 +460,13 @@
       "targetId": null,
       "targetType": null,
       "value": null,
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+      "name": "com.amazonaws.ecs.capability.task-iam-role"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
     },
     {
       "targetId": null,
@@ -454,61 +479,75 @@
       "targetType": null,
       "value": null,
       "name": "com.amazonaws.ecs.capability.logging-driver.json-file"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
     }
   ],
-  "requiresCompatibilities": null,
+  "requiresCompatibilities": [],
   "networkMode": null,
   "cpu": null,
-  "revision": 35,
+  "revision": 38,
   "status": "ACTIVE",
   "volumes": [
     {
       "name": "nextcloud",
       "host": {
         "sourcePath": "/mnt/efs/nextcloud"
-      }
+      },
+      "dockerVolumeConfiguration": null
     },
     {
       "name": "nginx_conf",
       "host": {
         "sourcePath": "/mnt/efs/nginx/"
-      }
+      },
+      "dockerVolumeConfiguration": null
     },
     {
       "name": "docker-sock",
       "host": {
         "sourcePath": "/var/run/docker.sock"
-      }
+      },
+      "dockerVolumeConfiguration": null
     },
     {
       "name": "certs",
       "host": {
         "sourcePath": "/mnt/efs/certs"
-      }
+      },
+      "dockerVolumeConfiguration": null
     },
     {
       "name": "vhostd",
       "host": {
         "sourcePath": "/mnt/efs/vhostd"
-      }
+      },
+      "dockerVolumeConfiguration": null
     },
     {
       "name": "html",
       "host": {
         "sourcePath": "/mnt/efs/html"
-      }
+      },
+      "dockerVolumeConfiguration": null
     },
     {
       "name": "dhparam",
       "host": {
         "sourcePath": "/mnt/efs/dhparam"
-      }
+      },
+      "dockerVolumeConfiguration": null
     },
     {
       "name": "redis",
       "host": {
         "sourcePath": "/mnt/efs/redis"
-      }
+      },
+      "dockerVolumeConfiguration": null
     }
   ]
 }
